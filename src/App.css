@@ -1,0 +1,116 @@
+:root{
+  --highlighter : orange;
+  --bg : rgb(16, 16, 16) ;
+  --color : #ffffff ;
+}
+body{
+  background-color: var(--bg);
+  color: var(--color);
+}
+.app{
+  position: relative;
+  margin : 0 auto;
+  overflow-x: hidden;  
+}
+.navbar-Container{
+  position: fixed;
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 0.5vw;
+  z-index: 100;
+}
+.myDropmenu{
+  position: absolute;
+  z-index: 101;
+  display: flex;
+  /* display: none; */
+  flex-direction: column;
+  align-items:stretch;
+  padding: 2px;
+  background-color: var(--color);
+  transition: 1.5s all;
+}
+
+.myDropmenu a ,.myDropmenu button {
+  padding: 2px 1vh;
+  color : var(--bg);
+  background-color: var(--color);
+}
+.myDropmenu button{
+  width: 100%;
+  text-align: left;
+  border: 1px solid transparent;
+  font-weight: bold;
+  font-size: large;
+}
+.closeBtn{
+  text-align: right !important;
+}
+
+.nav_sec2{
+  display: inline-flex;
+  align-items: center;
+}
+.nav_sec2>button{
+  margin: 0 1vw;
+}
+.icon {
+  background-color: var(--color);
+  color: var(--bg);
+  line-height: 16px;
+  padding: 1vw;
+  border-radius: 50%;
+  background-image: linear-gradient(to right, var(--color) 0%, var(--color) 50%, var(--color) 100%); 
+  display: inline-block;
+  width: 3.5vw;
+  height: 3.5vw;
+  -webkit-box-shadow: inset 0px -1px 15px 5px rgba(0,0,0,0.58); 
+  box-shadow: var(--color) 3px 4px 6px 1px, inset 0px -1px 15px 5px rgba(0,0,0,0.58);
+  border: 0px;
+}
+.icon:hover ,.icon:active{
+  border: 2px groove var(--highlighter); 
+ }
+.noBtn{
+  border: 0px solid;
+  background-color: transparent;
+  color : var(--color);
+}
+a{
+  color: var(--color);
+}
+a:hover , button:hover ,.noBtn:hover{
+  color : var(--highlighter);
+  text-decoration: none;
+}
+
+.modeBtn{
+  background-color: #56565669;
+  width: fit-content;
+  block-size: fit-content;
+  padding: 0.1vw;
+  border-radius: 50%;
+  border: 5px solid #a7a7a712;
+  color: gray;
+}
+.grayLine{
+  display: inline-flex;
+  box-sizing: border-box;
+  margin: 0 2%;
+  height: 2px;
+  width: 96%;
+  border-radius: 2vw;
+  background-color: rgb(76, 75, 75);
+}
+.grayLine>div:first-child{
+  width: 10vw;
+  background-color: rgba(255, 255, 255, 0.673);
+}
+
+@media screen and (min-width: 750px) {
+  /* .myAppContainer{
+    width : 750px;
+  } */
+  
+}
