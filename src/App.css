@@ -2,6 +2,8 @@
   --highlighter : orange;
   --bg : rgb(16, 16, 16) ;
   --color : #ffffff ;
+  --appWidth : 786px;
+  --navHeight : 8vh;
 }
 body{
   background-color: var(--bg);
@@ -10,51 +12,30 @@ body{
 .app{
   position: relative;
   margin : 0 auto;
-  overflow-x: hidden;  
+  height: auto;
+  width : var(--appWidth);
 }
-.navbar-Container{
-  position: fixed;
+
+.inlineFlexStatus{
   display: inline-flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 0.5vw;
-  z-index: 100;
-}
-.myDropmenu{
-  position: absolute;
-  z-index: 101;
-  display: flex;
-  /* display: none; */
-  flex-direction: column;
-  align-items:stretch;
-  padding: 2px;
-  background-color: var(--color);
-  transition: 1.5s all;
+  box-sizing: border-box;
+  padding: 0 0.05vw;
+  background-color: var(--bg);
+  color: var(--color);
+  width: var(--appWidth);
 }
 
-.myDropmenu a ,.myDropmenu button {
-  padding: 2px 1vh;
-  color : var(--bg);
-  background-color: var(--color);
-}
-.myDropmenu button{
-  width: 100%;
-  text-align: left;
-  border: 1px solid transparent;
-  font-weight: bold;
-  font-size: large;
-}
-.closeBtn{
-  text-align: right !important;
-}
-
-.nav_sec2{
+.statusChild2{
   display: inline-flex;
+  justify-content: space-between;
   align-items: center;
 }
-.nav_sec2>button{
-  margin: 0 1vw;
+.statusChild2>button , .statusChild2>label{
+  margin:0 1vw;
 }
+
 .icon {
   background-color: var(--color);
   color: var(--bg);
@@ -68,6 +49,16 @@ body{
   -webkit-box-shadow: inset 0px -1px 15px 5px rgba(0,0,0,0.58); 
   box-shadow: var(--color) 3px 4px 6px 1px, inset 0px -1px 15px 5px rgba(0,0,0,0.58);
   border: 0px;
+  position: relative;
+}
+.icon img{
+  position: absolute;
+  border-radius: 50%;
+  top : 0 ; 
+  left : 0;
+  opacity: 0.8;
+  width: 3.5vw;
+  height: 3.5vw;
 }
 .icon:hover ,.icon:active{
   border: 2px groove var(--highlighter); 
@@ -85,26 +76,16 @@ a:hover , button:hover ,.noBtn:hover{
   text-decoration: none;
 }
 
-.modeBtn{
-  background-color: #56565669;
-  width: fit-content;
-  block-size: fit-content;
-  padding: 0.1vw;
-  border-radius: 50%;
-  border: 5px solid #a7a7a712;
-  color: gray;
-}
 .grayLine{
   display: inline-flex;
   box-sizing: border-box;
-  margin: 0 2%;
   height: 2px;
-  width: 96%;
+  width: var(--appWidth);
   border-radius: 2vw;
   background-color: rgb(76, 75, 75);
 }
 .grayLine>div:first-child{
-  width: 10vw;
+  width: 20%;
   background-color: rgba(255, 255, 255, 0.673);
 }
 

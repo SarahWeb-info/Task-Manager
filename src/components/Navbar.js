@@ -1,35 +1,95 @@
-import React from 'react';
-import Button from './Button';
+import React, { useState } from 'react';
+import '../css/navbar.css';
+import { BsFillMoonFill, BsBellFill, BsArrowBarLeft, BsArrowBarRight, BsListNested } from 'react-icons/bs';
+import Icon from '../imgs/icon.png';
+import { handleMode } from '../handleMode';
 
-export default function Navbar(props) {
-    const {navHeight , appWidth } = props;
-    // if page is main , imp status 1 else status to
-    return ( 
-        <> 
-        <div className="navbar-Container" style={{height: `${navHeight}`,width: `${appWidth}`}}>
-            <Button content="BsListNested" event="openLeft" toggleDiv="myDropmenu" addClass="noBtn "/>
-            <div className="myDropmenu" style={{top: '0',left: '-200%',width: `${appWidth}`,height: '100vh'}}>
-                <Button content="BsArrowBarLeft" event="closeLeft"  toggleDiv="myDropmenu" />
-                <a href="http://" target="_blank" rel="noopener noreferrer">Link 1</a>
-                <a href="http://" target="_blank" rel="noopener noreferrer">Link 2</a>
-                <a href="http://" target="_blank" rel="noopener noreferrer">Link 3</a>
-                <a href="http://" target="_blank" rel="noopener noreferrer">Link 4</a>
-            </div>
-            
-            <div className="nav_sec2">
-                <Button content="BsFillMoonFill" event="changeMode" addClass="icon" />
-                <Button content="BsBellFill" event="tothink" addClass="noBtn" />
-                <Button content="logo" event="openRight" toggleDiv="myDropmenu" addClass="icon" />
-                <div className="myDropmenu" style={{top: '0',right: '-100%',width: `30vw`,height: '100vh'}}>
-                    <Button content="BsArrowBarRight" event="closeRight"  toggleDiv="myDropmenu" addClass="closeBtn" />
-                    <a href="http://" target="_blank" rel="noopener noreferrer">Link 1</a>
-                    <a href="http://" target="_blank" rel="noopener noreferrer">Link 2</a>
-                    <a href="http://" target="_blank" rel="noopener noreferrer">Link 3</a>
-                    <a href="http://" target="_blank" rel="noopener noreferrer">Link 4</a>
-                </div>
-            </div>
+export default function Navbar() {
+  const [leftDrop, setLeftDrop] = useState('-100vw');
+  const [rightDrop, setRightDrop] = useState('-100vw');
+
+  const openLeftDropdown = () => {
+    setLeftDrop('0');
+  };
+  const openRightDropdown = () => {
+    setRightDrop('0');
+  };
+  const closeLeftDropdown = () => {
+    setLeftDrop('-100vw');
+  };
+  const closeRightDropdown = () => {
+    setRightDrop('-100vw');
+  };
+
+  const changeMode = () => {
+    handleMode();
+  };
+
+  return (
+    <>
+      <div className="navbar-Container inlineFlexStatus">
+
+        <button onClick={openLeftDropdown} className="noBtn">
+          <BsListNested />
+        </button>
+
+        <div className="myDropmenu dropdownLeft" style={{left : `${leftDrop}`}}>
+          <button onClick={closeLeftDropdown} className="noBtn">
+            <BsArrowBarLeft />
+          </button>
+
+          <a href="http://" target="_blank" rel="noopener noreferrer">
+            Link 1
+          </a>
+          <a href="http://" target="_blank" rel="noopener noreferrer">
+            Link 2
+          </a>
+          <a href="http://" target="_blank" rel="noopener noreferrer">
+            Link 3
+          </a>
+          <a href="http://" target="_blank" rel="noopener noreferrer">
+            Link 4
+          </a>
         </div>
-        <div style = {{ backgroundColor : 'transparent', height: `${navHeight}`, width : `${appWidth}`}} ></div>
-        </>
-    )
+
+        <div className="statusChild2">
+
+          <button onClick={changeMode} className="icon">
+            <BsFillMoonFill />
+          </button>
+
+          <button className="noBtn">
+            <BsBellFill />
+          </button>
+
+          <button onClick={openRightDropdown} className="icon">
+            <img src={Icon} alt="" />
+          </button>
+
+          <div className="myDropmenu dropdownRight" style={{ right: `${rightDrop}` }}>
+
+            <button className="noBtn" onClick={closeRightDropdown}>
+              <BsArrowBarRight />
+            </button>
+
+            <a href="http://" target="_blank" rel="noopener noreferrer">
+              Link 1
+            </a>
+            <a href="http://" target="_blank" rel="noopener noreferrer">
+              Link 2
+            </a>
+            <a href="http://" target="_blank" rel="noopener noreferrer">
+              Link 3
+            </a>
+            <a href="http://" target="_blank" rel="noopener noreferrer">
+              Link 4
+            </a>
+          
+          </div>
+        
+        </div>
+      </div>
+      <div className ="navbarGhost" ></div>
+    </>
+  )
 }
