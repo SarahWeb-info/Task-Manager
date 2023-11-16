@@ -4,9 +4,9 @@ import Dashboard from './Dashboard';
 
 export default function main() {
   return (
-    <>
+    <div className='container'>
       <Navbar />
       <Dashboard />
-    </>
+    </div>
   )
 }

@@ -3,7 +3,6 @@ import { BsCheckLg ,BsFillTrashFill,BsFillPencilFill ,BsBellFill } from "react-i
 
 export default function TaskCards(props) {
   const [dropBtn , setDropBtn] = useState(false);
-  const [randomColors , setRandomColors] = useState();
 
   console.log(props.collab);
   let cats = props.cats;
@@ -52,7 +51,7 @@ export default function TaskCards(props) {
                 <button className='noBtn' onClick={handleDropBtn}>...</button>
             </div>
             <h4>
-                <a href="http://" target="_blank" rel="noopener noreferrer">{props.title}</a>
+                <a href="/task" rel="noopener noreferrer">{props.title}</a>
             </h4>
             <div className='taskCard2Child2'>
             {cats.map((item, index) => {

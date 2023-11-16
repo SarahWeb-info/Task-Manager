@@ -1,4 +1,3 @@
-// import React, { useState } from 'react';
 import React from 'react';
 import '../css/intro.css';
 import Carousel from 'react-bootstrap/Carousel';
@@ -11,14 +10,14 @@ import Img6 from '../imgs/intro6.jpg';
 
 export default function Intro() {
   return (
-  <div className = "container-lg">
+  <div className = "container-lg app">
 
-    <div className = "intro myAppContainer">
+    <div className = "intro">
       <h1>CALENDO</h1>
       <Carouselitem/>
       <div className='introStatus'>
-        <h2><a href="http://">Get started</a></h2>
-        <a href="http://" className='icon'>skip</a>
+        <h2><a href="./app">Get started</a></h2>
+        <a href="./app" className='icon'>skip</a>
       </div>
     </div>
 </div>

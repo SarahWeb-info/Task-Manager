@@ -1,23 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { handleMode } from './handleMode';
-import './App.css';
-import Intro from './tabs/Intro';
+import React from 'react';
+import './app.css';
+import Intro from './tabs/IntroTime';
 import Main from './tabs/Main';
+import Task from './tabs/TaskPg';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 export default function App() {
-  const [showIntro, setShowIntro] = useState(true); 
-
-  useEffect(() => {
-    setTimeout(() => {
-      setShowIntro(false);
-    }, 3000); 
-    handleMode();
-  }, []);
-
-  
   return (
-    <div className='app'>
-      {showIntro ? <Intro /> : <Main />}
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Intro />} />
+        <Route path="/app" element={<Main />} />
+        <Route path="/task" element={<Task />} />
+      </Routes>
+    </Router>
   );
 }

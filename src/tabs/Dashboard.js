@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import moment from 'moment';
-import {BsSearch} from "react-icons/bs";
+import {BsSearch , BsBellFill} from "react-icons/bs";
 import '../css/dashboard.css';
 import MainImg from '../imgs/intro6.jpg';
 import TaskCards from '../components/TaskCards';
@@ -54,6 +54,12 @@ export default function Dashboard() {
 
     let nextTask = todoArray[0];
     let nextTaskTime = nextTask[1].Time;
+    let alarmDisplay = false;
+    if (nextTask[1].Alarm) {
+      alarmDisplay = true;
+    }else{
+      alarmDisplay = false;
+    }
 
     useEffect(() => {
         // This will run once when the component mounts
@@ -115,7 +121,7 @@ export default function Dashboard() {
         <img src={MainImg} alt="..."/>
         <div>
             <h3>{currentTime}</h3>
-            <i>Next Task in {showNextTime}</i>
+            <span>{alarmDisplay && <span className='highlighter'><BsBellFill /> </span> }<i>Next Task in {showNextTime}</i></span>
         </div>
     </div> 
   

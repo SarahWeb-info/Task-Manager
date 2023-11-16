@@ -12,9 +12,9 @@
     align-items:stretch;
     padding: 2px;
     background-color: var(--color);
-    transition: 1.5s all;
+    transition: top 1s ease, opacity 1.5s ease;
   }
-  
+
   .myDropmenu a ,.myDropmenu button {
     padding: 2px 1vh;
     color : var(--bg);
@@ -27,22 +27,14 @@
     font-weight: bold;
     font-size: large;
   }
-  .closeBtn{
-    text-align: right !important;
-  }
   .dropdownLeft{
     top : 0 ; 
     width: var(--appWidth);
-    height: 100vh;
-  }
-  .dropdownRight{
-    top : 0 ; 
-    width: 30vw;
     height: 100vh;
   }
   .navbarGhost{
     background-color: transparent;
     z-index: 0;
     width: var(--appWidth);
-    height: var(--navHeight);
+    height: calc(var(--navHeight) + 2vh);
   }
