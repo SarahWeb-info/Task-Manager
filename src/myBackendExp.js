@@ -17,8 +17,8 @@ export default function App() {
 //1- get the current time moving in useEffect per sec
   const [currentTime , setCurrentTime] = useState();
   const [showNextTime , setShowNextTime] = useState();
-  const [showDateSearch , setShowDateSearch] = useState();
-  const [showStringSearch , setShowStringSearch] = useState();
+  const [showDateResult , setShowDateResult] = useState();
+  const [showStringResult , setShowStringResult] = useState();
 
   // 2 - get the data from local storage
   let dataObj = JSON.parse(localStorage.getItem('data')) || {};
@@ -121,7 +121,7 @@ export default function App() {
       if (moment(taskDate).isSame(inputDate)) {
         dateSearchArray.push(data[i]);
       }
-      setShowDateSearch(displayArrays(dateSearchArray));
+      setShowDateResult(displayArrays(dateSearchArray));
     }     
   }
 
@@ -144,7 +144,7 @@ export default function App() {
         stringSearchArray.push(data[i]);
       }
     }     
-    setShowStringSearch(displayArrays(stringSearchArray));
+    setShowStringResult(displayArrays(stringSearchArray));
     }
   }
 
@@ -166,9 +166,9 @@ export default function App() {
           <input type="date" name="" id="" style={{width:'32px' , color : 'white',userSelect:'none' , border: '0px' , outline: '0px'}} onInput={dateSearch} />
       </div>
       <h3>Here is the date search array</h3>
-      {showDateSearch}
+      {showDateResult}
       <h3>Here is the String search array</h3>
-      {showStringSearch}
+      {showStringResult}
     </div>
   )
 }

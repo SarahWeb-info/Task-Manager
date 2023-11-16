@@ -14,6 +14,7 @@ export default function App() {
     handleMode();
   }, []);
 
+  
   return (
     <div className='app'>
       {showIntro ? <Intro /> : <Main />}

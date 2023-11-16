@@ -39,16 +39,22 @@ export default function Navbar() {
           </button>
 
           <a href="http://" target="_blank" rel="noopener noreferrer">
-            Link 1
+            New Task
           </a>
           <a href="http://" target="_blank" rel="noopener noreferrer">
-            Link 2
+            Missed Tasks
           </a>
           <a href="http://" target="_blank" rel="noopener noreferrer">
-            Link 3
+            Finished Tasks
           </a>
           <a href="http://" target="_blank" rel="noopener noreferrer">
-            Link 4
+            To do Tasks
+          </a>
+          <a href="http://" target="_blank" rel="noopener noreferrer">
+            More Apps
+          </a>
+          <a href="http://" target="_blank" rel="noopener noreferrer">
+            About Us
           </a>
         </div>
 

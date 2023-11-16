@@ -1,8 +1,15 @@
-import React, {useState}  from 'react'
+import React, {useState }  from 'react'
 import { BsCheckLg ,BsFillTrashFill,BsFillPencilFill ,BsBellFill } from "react-icons/bs";
 
 export default function TaskCards(props) {
   const [dropBtn , setDropBtn] = useState(false);
+  const [randomColors , setRandomColors] = useState();
+
+  console.log(props.collab);
+  let cats = props.cats;
+  
+  let collabs = props.collab;
+    
   const handleDropBtn =()=>{
     setDropBtn(!dropBtn);
   }
@@ -23,10 +30,6 @@ export default function TaskCards(props) {
 
   return (
     <>
-        <div className='grayLine'>
-        <div></div>
-        <div></div>
-        </div>
     <div className = "inlineFlexStatus" > 
         <div className='taskCard1'>
             <p>{date}</p>
@@ -35,7 +38,6 @@ export default function TaskCards(props) {
                 <small>{day}</small>
             </p>
         </div>
-        {/* here should be loop for display tasks of same date */}
         <div className='taskCard2'>
             <div>
                 <p>{time}</p>
@@ -53,12 +55,34 @@ export default function TaskCards(props) {
                 <a href="http://" target="_blank" rel="noopener noreferrer">{props.title}</a>
             </h4>
             <div className='taskCard2Child2'>
-                {/* set some basic colors and a misc color for unknown , 
-                display these tasks by loop */}
-                <p style = {{backgroundColor:'blue'}}>work</p>
-                <p style = {{backgroundColor:'yellow'}}>me</p>
-                <p style = {{backgroundColor:'green'}}>meeting</p>
+            {cats.map((item, index) => {
+                let color;
+                if (item === 'work') {
+                    color = "lightblue";
+                } else if (item === 'daily') {
+                    color = "lightgreen";
+                } else if (item === 'family') {
+                    color = "pink";
+                } else if (item === 'important') {
+                    color = "yellow";
+                } else {
+                    color = "beige";
+                }
+
+                return (
+                    <React.Fragment key={index}>
+                    <p style={{ backgroundColor: color }}>{item}</p>
+                    </React.Fragment>
+                );
+            })}
             </div>   
+            <div className = 'inlineFlexStatus'>
+                <div>
+                    {collabs.map((item, index) => (
+                        <p key={index} class="icon">{item}</p>
+                    ))}
+                </div>
+            </div>
         </div>
     </div>
     </>
