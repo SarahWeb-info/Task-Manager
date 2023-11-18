@@ -94,4 +94,4 @@ let data = {
 const jsonString = JSON.stringify(data);
 
 // Save to local storage
-localStorage.setItem('data', jsonString);
+localStorage.setItem('task', jsonString);

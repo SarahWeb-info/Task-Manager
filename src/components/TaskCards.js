@@ -4,7 +4,6 @@ import { BsCheckLg ,BsFillTrashFill,BsFillPencilFill ,BsBellFill } from "react-i
 export default function TaskCards(props) {
   const [dropBtn , setDropBtn] = useState(false);
 
-  console.log(props.collab);
   let cats = props.cats;
   
   let collabs = props.collab;
@@ -12,34 +11,20 @@ export default function TaskCards(props) {
   const handleDropBtn =()=>{
     setDropBtn(!dropBtn);
   }
-  const propDate = new Date(props.time);
-  const monthNames = [
-    'JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN',
-    'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'
-  ];
-  
-  const month = monthNames[propDate.getMonth()];
-
-  const date = propDate.getDate().toString().padStart(2, '0');
-  const day = new Intl.DateTimeFormat('en-US', { weekday: 'short' }).format(propDate);
-
-  const hours = propDate.getHours().toString().padStart(2, '0');
-  const minutes = propDate.getMinutes().toString().padStart(2, '0');
-  const time = `${hours}:${minutes}`;
 
   return (
     <>
     <div className = "inlineFlexStatus" > 
         <div className='taskCard1'>
-            <p>{date}</p>
+            <p>{props.date}</p>
             <p>
-                <b>{month}</b><br/>
-                <small>{day}</small>
+                <b>{props.month}</b><br/>
+                <small>{props.day}</small>
             </p>
         </div>
         <div className='taskCard2'>
             <div>
-                <p>{time}</p>
+                <p>{props.time}</p>
                 {dropBtn && 
                     <div>
                         <button><BsCheckLg /></button>
