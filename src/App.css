@@ -1,8 +1,8 @@
 :root{
   --highlighter : orange;
-  --bg : rgb(16, 16, 16) ;
+  --bg : rgb(30, 30, 30) ;
   --color : #ffffff ;
-  --appWidth : 786px;
+  --appWidth : 100vw;
   --navHeight : 8vh;
 }
 body{
@@ -11,31 +11,35 @@ body{
 }
 
 .appContainer{
-  border: 5px solid green;
   position: relative;
-  margin : 0 auto;
+  margin : 0;
   height: auto;
   width : var(--appWidth);
 }
 
-.inlineFlexStatus{
-  display: inline-flex;
-  justify-content: space-between;
-  align-items: center;
+.flexColumn{
   box-sizing: border-box;
-  padding: 0 0.05vw;
-  background-color: var(--bg);
-  color: var(--color);
-  width: var(--appWidth);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-.statusChild2{
-  display: inline-flex;
+.flexInline{
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
   justify-content: space-between;
   align-items: center;
 }
-.statusChild2>button , .statusChild2>label{
-  margin:0 1vw;
+
+input[type="date"]{
+  height: auto;
+  z-index: 0;
+  border: 0px;
+  background-color: white !important;
+  border-radius: 1.5vw;
+  margin-left:3px;
 }
 
 .icon {
@@ -46,8 +50,10 @@ body{
   border-radius: 50%;
   background-image: linear-gradient(to right, var(--color) 0%, var(--color) 50%, var(--color) 100%); 
   display: inline-block;
-  width: 3.5vw;
-  height: 3.5vw;
+  /* width: 3.5vw; */
+  /* height: 3.5vw; */
+  width: fit-content;
+  block-size: fit-content;
   -webkit-box-shadow: inset 0px -1px 15px 5px rgba(0,0,0,0.58); 
   box-shadow: var(--color) 3px 4px 6px 1px, inset 0px -1px 15px 5px rgba(0,0,0,0.58);
   border: 0px;
@@ -91,12 +97,8 @@ a:hover , button:hover ,.noBtn:hover{
   background-color: rgba(255, 255, 255, 0.673);
 }
 
-.highlighter{
-  color: var(--highlighter);
-}
-@media screen and (min-width: 750px) {
-  /* .myAppContainer{
-    width : 750px;
-  } */
-  
+@media screen and (min-width: 786px) {
+  :root{
+    --appWidth : 786px;
+  }  
 }

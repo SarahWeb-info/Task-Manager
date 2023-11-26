@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { handleMode } from '../handleMode';
 import '../css/intro.css';
 import Carousel from 'react-bootstrap/Carousel';
 import Img1 from '../imgs/intro1.png';
@@ -9,10 +11,24 @@ import Img5 from '../imgs/intro5.jpg';
 import Img6 from '../imgs/intro6.jpg';
 
 export default function Intro() {
-  return (
-  <div className = "container-lg app">
+  const navigate = useNavigate();
 
-    <div className = "intro">
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      // Redirect to /app after 5 seconds
+      navigate('/app');
+    }, 5000);
+
+    // Clear the timeout if the component unmounts
+    handleMode();
+    return () => clearTimeout(timeoutId);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  
+  return (
+    <div className = "flexColumn intro">
       <h1>CALENDO</h1>
       <Carouselitem/>
       <div className='introStatus'>
@@ -20,7 +36,6 @@ export default function Intro() {
         <a href="./app" className='icon'>skip</a>
       </div>
     </div>
-</div>
   )
 }
 

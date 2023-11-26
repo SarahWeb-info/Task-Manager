@@ -1,27 +1,100 @@
 .dayCard{
-    color: var(--bg);
-    background-color: var(--color);
-    border-radius: 2vw;
-    margin-bottom: 2vh;
-  }
-  .dayCard > img{
-    border-top-left-radius: 2vw;
-    border-bottom-left-radius: 2vw;
-    width: 20%;
-  }
-  .dayCard >div{
-    padding-right: 2vw;
-    text-align: right;
-  }
+  color: var(--bg);
+  background-color: var(--color);
+  border-radius: 2vw;
+  margin-bottom: 2vh;
+}
+.dayCard > img{
+  border-top-left-radius: 2vw;
+  border-bottom-left-radius: 2vw;
+  width: 20%;
+}
+.dayCard >div{
+  padding-right: 2vw;
+  text-align: right;
+}
+
+.filterBar{
+  box-sizing: border-box;
+  padding: 0 0.05vw;
+  background-color: var(--bg);
+  color: var(--color);
+  width: var(--appWidth);
+  position: relative;
+}
+.filterBar button{
+  border: 0px;
+  color: var(--color);
+  background-color: var(--bg);
+}
+.filterBar button:hover , .filterBar input:hover{
+  border-bottom: 1px solid var(--highlighter);
+}
+.filterBar input{
+  border: 0px;
+  border-bottom: 1px solid;
+  color: var(--color);
+  background-color: var(--bg);
+}
+.filterBar input[type="date"]{
+  width: 22px;
+  margin-left:3px;
+}
+
+.taskCard-Dates{
+  width: 20%;
+}
+.taskCard-Dates>p:first-child{
+  font-size: large;
+  padding:0.5vh 1vw;
+  background-color: green;
+  border-bottom-right-radius: 2vw;
+  border-top-right-radius: 2vw;
+  width: 25%;
+}
+ 
+.taskCard-Details{
+  width: 80%;
+}
+.btnMenu{
+  background-color: #B6B6B6;
+  border-radius: 1.5vw;
+}
+.btnMenu button{
+  border-radius: 1.5vw;
+  border: 0px;
+}
+.btnMenu button:hover{
+  -webkit-box-shadow: inset 0px -1px 15px 5px rgba(0,0,0,0.332); 
+  box-shadow: inset 0px -1px 15px 5px rgba(0, 0, 0, 0.332);
+}
+.catBadges>p{
+  text-shadow: 2px 1px 2px #B6B6B6;
+}
+.catBadges>p:first-child{
+  border-top-left-radius: 1.8vw;
+  border-bottom-left-radius: 1.8vw;
+} 
+.catBadges>p:last-child{
+  border-top-right-radius: 1.8vw;
+  border-bottom-right-radius: 1.8vw;
+} 
+
   .addTaskIcon-container{
+    z-index: 101;
     position: fixed;
     bottom: 5vh;
     width: var(--appWidth);
     height: auto;
     display:inline-flex;
-    justify-content: flex-end;  
+    transition: 1.5s;
+  }
+  .addTaskIcon-container:hover{
+    bottom:8vh;
   }
   .addTaskIcon{
+    position: relative;
+    z-index: 102;
     background-color:var(--color);
     color: var(--bg);
     border-radius: 50%;
@@ -34,54 +107,8 @@
     align-items: center;
     cursor: pointer;
     font-size: 2rem;
-    -webkit-box-shadow: 3px 10px 11px 0px rgba(0,0,0,0.53); 
-    box-shadow: 3px 10px 11px 0px rgba(0,0,0,0.53);
+    -webkit-box-shadow: 3px 10px 11px 0px rgba(30, 30, 30,0.53); 
+    box-shadow: 3px 10px 11px 0px rgba(30, 30, 30,0.53);
     transition: 1s;
     user-select: none;
-  }
-  .addTaskIcon:hover{
-    margin: 0 1vh 1vh auto;
-  }
-  .taskCard1{
-    width : 20%;
-  }
-  .taskCard1>p:first-child{
-    font-size: large;
-    background-color: green;
-    border-bottom-right-radius: 2vw;
-    border-top-right-radius: 2vw;
-    width: 25%;
-  }
-  .taskCard2{
-    width : 80%;
-  }
-  .taskCard2>div{
-    display: inline-flex;
-    justify-content: space-between;
-    align-items: flex-start;
-  }
-  .taskCard2>div:first-child{
-    width: 100%;
-  }
-  .taskCard2>div:first-child div{
-    background-color: rgba(128, 128, 128, 0.212);
-    border-radius: 1vw;
-  }
-  .taskCard2>div:first-child div button{
-    border: 0px;
-    border-radius: 50%;
-    background-color: rgba(128, 128, 128, 0.444);
-    margin: 0 2px;
-    color: var(--color);
-  }
-  .taskCard2Child2>p{
-    padding: 0.2vh 1vw;
-  }
-  .taskCard2Child2>p:first-child{
-    border-bottom-left-radius: 2vw;
-    border-top-left-radius: 2vw;
-  }
-  .taskCard2Child2>p:last-child{
-    border-bottom-right-radius: 2vw;
-    border-top-right-radius: 2vw;
   }

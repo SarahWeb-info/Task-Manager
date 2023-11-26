@@ -1,74 +1,118 @@
-import React, {useState }  from 'react'
+import React , {useState} from 'react'
 import { BsCheckLg ,BsFillTrashFill,BsFillPencilFill ,BsBellFill } from "react-icons/bs";
+import DialogForm from './DialogForm';
 
-export default function TaskCards(props) {
-  const [dropBtn , setDropBtn] = useState(false);
+export default function TaskCard(props) {
+    let showAlarm = props.alarm;
+    let cats = props.cats;
+    let collab = props.collab;
 
-  let cats = props.cats;
-  
-  let collabs = props.collab;
+    const [btnMenu , setBtnMenu] = useState(false);
     
-  const handleDropBtn =()=>{
-    setDropBtn(!dropBtn);
-  }
+    const buttonStyle = {
+        color: 'var(--bg)',
+    };
+    
+    const highlightedButtonStyle = {
+        color: 'var(--highlighter)', // Set the highlighted color
+    };
 
-  return (
+    const getTask = ()=>{
+        const data = JSON.parse(localStorage.getItem('task')) || {};
+        return data;
+    }
+    
+    const handleBtnMenu =() =>{
+        setBtnMenu(!btnMenu);
+    }
+
+    const handleBtnBar=(x)=>{
+        let task = getTask();
+        if (x === "E") {
+            console.log(task[props.itemKey]);
+            document.getElementById('editForm').style.display = 'block';
+        }else if (x === "D"){
+            task[props.itemKey].Status = "done";
+        }else if (x === "A"){
+            task[props.itemKey].Alarm = !task[props.itemKey].Alarm;
+        }else {
+            delete task[props.itemKey];
+        }
+    }    
+    
+    return (
     <>
-    <div className = "inlineFlexStatus" > 
-        <div className='taskCard1'>
-            <p>{props.date}</p>
-            <p>
-                <b>{props.month}</b><br/>
-                <small>{props.day}</small>
-            </p>
+        <div id='editForm' style={{display : 'none'}}>
+            <DialogForm 
+                formType = "edit"
+                keyDate = {props.itemKey} 
+                title = {props.title}
+                task = {props.time}
+                alarm = {props.alarm}
+                cat = {props.cat}
+                collab = {props.collab}
+                status = {props.status}
+            />
         </div>
-        <div className='taskCard2'>
+
+        <div className='flexInline'>
+            <span>
+                {showAlarm && <BsBellFill />}{props.time}
+            </span>
             <div>
-                <p>{props.time}</p>
-                {dropBtn && 
-                    <div>
-                        <button><BsCheckLg /></button>
-                        <button><BsFillTrashFill /></button>
-                        <button><BsFillPencilFill /></button>
-                        <button><BsBellFill /></button>
-                    </div>
+                {btnMenu && 
+                    <span className='btnMenu'>
+                        <button onClick={()=>handleBtnBar("E")}><BsFillPencilFill /></button>
+                        <button onClick={()=>handleBtnBar("D")}><BsCheckLg /></button>
+                        <button onClick={()=>handleBtnBar("E")}><BsFillTrashFill /></button>
+                        <button onClick={()=>handleBtnBar("")} style={props.alarm === true ? highlightedButtonStyle : buttonStyle} ><BsBellFill /></button>
+                    </span>
                 }
-                <button className='noBtn' onClick={handleDropBtn}>...</button>
+                <button className='noBtn' onClick={handleBtnMenu}>...</button>
             </div>
+        </div>
+
+        <div>
             <h4>
                 <a href="/task" rel="noopener noreferrer">{props.title}</a>
             </h4>
-            <div className='taskCard2Child2'>
-            {cats.map((item, index) => {
-                let color;
-                if (item === 'work') {
-                    color = "lightblue";
-                } else if (item === 'daily') {
-                    color = "lightgreen";
-                } else if (item === 'family') {
-                    color = "pink";
-                } else if (item === 'important') {
-                    color = "yellow";
-                } else {
-                    color = "beige";
-                }
 
-                return (
-                    <React.Fragment key={index}>
-                    <p style={{ backgroundColor: color }}>{item}</p>
-                    </React.Fragment>
-                );
-            })}
-            </div>   
-            <div className = 'inlineFlexStatus'>
-                <div>
-                    {collabs.map((item, index) => (
-                        <p key={index} class="icon">{item}</p>
-                    ))}
-                </div>
+            <div className='flexInline'>
+
+                {props.cats.length>0 && 
+                    <div  className = 'd-inline-flex catBadges'>
+                        {cats.map((item, index) => {
+                            let color ;
+                            if (item === 'work') {
+                                color = "blue";
+                            } else if (item === 'daily') {
+                                color = "green";
+                            } else if (item === 'family') {
+                                color = "pink";
+                            } else if (item === 'important') {
+                                color = "yellow";
+                            } else {
+                                color = `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`;
+                            }
+                            return (
+                                <React.Fragment key={index}>
+                                        <p className='px-2' style={{ backgroundColor: color }}>{item}</p>
+                                </React.Fragment>
+                            );     
+                        })}  
+                    </div>
+                }
+        
+                {props.collab.length>0 && 
+                    <div className = 'd-inline-flex'>   
+                        {collab.map((item, index) => (
+                            <p key={index} className="icon">{item}</p>
+                        ))}
+                    </div>
+                }
             </div>
         </div>
-    </div>
     </>
   )
 }
+

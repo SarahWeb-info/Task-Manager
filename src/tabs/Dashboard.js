@@ -1,183 +1,185 @@
-import React, { useState } from 'react'
-import TaskCards from '../components/TaskCards';
-import '../css/dashboard.css';
-import {BsSearch , BsBellFill} from "react-icons/bs";
+import React, { useState  , useEffect } from 'react'
+import dateFormat ,{ data , getData ,arrayFilter,strFilter,dateFilter} from '../GetData.js';
+import TaskCard from '../components/TaskCards.js';
+import DialogForm from '../components/DialogForm.js';
+import "../css/dashboard.css";
+import { BsFunnel } from "react-icons/bs";
+import Img from '../imgs/intro3.jpg';
 
 export default function Dashboard() {
-  const [showStringInput, setShowStringInput] = useState(false);
-
-    let dataObj = JSON.parse(localStorage.getItem('tasks')) || {};
-    //converting data object in array of keys and values
-    const data = Object.entries(dataObj);
-    data.sort((a, b) => new Date(b[1].Time) - new Date(a[1].Time)); //descending
-
-    let dataPresent = false;
-    if (data.length>0) {
-      dataPresent = true;
-    }else{
-      dataPresent = false;
-    }
-
-    //get the date format
-    const dateFormat = (paramDate) => {
-      let dateObject;
+    console.clear();
+    const [ currDate , setCurrDate ] = useState(dateFormat(new Date));
     
-      // Check if paramDate is a string, then convert to Date object
-      if (typeof paramDate === 'string') {
-        dateObject = new Date(paramDate);
-      } else if (paramDate instanceof Date) {
-        dateObject = paramDate;
-      } else {
-        throw new Error('Error .There is no date or a string to calculate.');
-      }
+    const [arr , setArr] = useState(data);
+    const [filterHeading , setFilterHeading ] = useState("To Do's");
+
+    // const [ timeLeftStr , setTimeLeftStr ] = useState("");
     
-      // Extract individual components
-      const year = dateObject.getFullYear();
-      const monthLong = dateObject.toLocaleDateString('en-US', { month: 'long' })
-      const month = dateObject.toLocaleDateString('en-US', { month: 'short' });
-      const date = dateObject.getDate();
-      const day = dateObject.toLocaleDateString('en-US', { weekday: 'long' });
-      const hours = dateObject.getHours();
-      const minutes = dateObject.getMinutes();
-    
-      // Return an object with the extracted components
-      return {
-        year,
-        monthLong,
-        month,
-        date,
-        day,
-        hours,
-        minutes,
-      };
-    };
-  
-    const [ showArr , setShowArr ] = useState(data);
-
-    const arrayFilter=(input)=>{
-      let arr = [];
-      let searchFor = "to do";
-
-      if (input === 3) {
-        searchFor = "missed";
-      }else if (input === 2) {
-        searchFor = "done";
-      }else if (input === 1) {
-        searchFor = "to do";
-      }else if (input === 0) {
-        arr = data;
-      }
-
-      for (let i in data) {
-        let sortTask = data[i]; //the whole tasks
+    const calculateDate = (time) => {
+        let currentTime = new Date;
+        currentTime = currentTime.getTime();
         
-        if (data[i][1].Status === searchFor) {
-          arr.push(sortTask);
-        }  
-      }
-      
-      setShowArr(arr);
-    }
-    
-    const strFilter =(inputValue)=>{
-      let arr = [];
-      let searchFor = inputValue.toLowerCase();
-      
-      for (let i in data) {
-        let sortTask = data[i]; //the whole tasks
         
-        let searchIn = data[i][1].Title + data[i][1].Task + data[i][1].Category + data[i][1].Collaborates;
-        searchIn = searchIn.toLowerCase();
-
-        // console.log(searchIn);
-        if (searchIn.includes(searchFor) ) {
-          arr.push(sortTask);
-          console.log("got it ");
-        }  
-      }
-      setShowArr(arr);
-    }
-
-    const dateFilter =(inputValue)=>{
-      let arr = [];
-      let inputDate = dateFormat(inputValue);
-
-      for (let i in data) {
-        let sortTask = data[i]; //the whole tasks
-        let taskDate = dateFormat(data[i][1].Time);
-        // here we have to compare the dates (not time) -taskDate and inputDate
-        if( taskDate.year === inputDate.year && taskDate.month === inputDate.month && taskDate.date === inputDate.date ){
-          arr.push(sortTask);
-          console.log("got it ");
+        let x = time - currentTime ;
+        
+        if ( x > 0 ) {
+            console.log("caluclate the time left");
+        }else{
+            console.log("keep the timeLeftStr empty");
         }
-      }
-      setShowArr(arr);
+    }
+    
+    if (arr.length > 0) {
+        let timeLeft  = new Date(arr[0][1].Time);
+        calculateDate(timeLeft.getTime());
     }
 
-    let prevDate;
-    return (
-      <>
-      <div className = 'inlineFlexStatus'>
-        <div className = 'statusChild2'>
-          
-          <button onClick={()=>arrayFilter(0)} className='noBtn'>ALL</button>
-          <button onClick={()=>arrayFilter(3)} className='noBtn'>Missed</button>
-          <button onClick={()=>arrayFilter(2)} className='noBtn'>Done's</button>
-          <button onClick={()=>arrayFilter(1)} className='noBtn'>To Do's</button>
+    useEffect(() => {
+      return () => {
+        setInterval(() => {
+            setCurrDate(dateFormat(new Date));
+        }, 60000);
+        
+      };
+    }, []);
+
+    const openDialogForm=()=>{
+        document.getElementById('dialogForm').style.display = 'block';
+    }
+
+    //for highlighting the active filter
+    const [selectedFilter, setSelectedFilter] = useState("to do");
+    const buttonStyle = {
+        color: 'var(--color)',
+    };
+    
+    const highlightedButtonStyle = {
+        color: 'var(--highlighter)', // Set the highlighted color
+    };
+
+    const displayArrays=(x)=>{
+        if (x === "M") {
+            setFilterHeading("Tasks Missed");
+            setSelectedFilter("missed");
+            setArr(arrayFilter("missed"));
+        }else if (x === "D"){
+            setFilterHeading("Tasks Done");
+            setSelectedFilter("done");
+            setArr(arrayFilter("done"));
+        }else if (x === "T"){
+            setFilterHeading("To Do's");
+            setSelectedFilter("to do");
+            setArr(arrayFilter("to do"));
+        }else {
+            setFilterHeading("All Tasks");
+            setSelectedFilter("all");
+            setArr(data);
+        }
+    }
+
+    const displayString=(str)=>{
+        setArr(strFilter(str));
+        setFilterHeading(`Search Results for ${str}`);
+    }
+
+    const displayDate=(d)=>{
+        setArr(dateFilter(d));
+        setFilterHeading(`Search Results for ${d}`);
+    }
+
+  let prevDate;
+  return (
+    <div>
+        <div className='flexInline dayCard'>
+            <img src={Img} alt=""/>
+            <div className='flex-column justify-content-center align-items-end'>
+                <h2>{currDate.time} {currDate.monthLong} ' {currDate.date}</h2>
+                <p>22 minutes left</p>
+            </div>
         </div>
-        <div className = 'statusChild2' >
-          <input
-          type="text"
-          id="inputSearch"
-          onInput = {(e) => strFilter(e.target.value)}
-          style={{color : 'black'}}
-        />
-  
-          <label htmlFor = "inputSearch">
-            <BsSearch />
-          </label>
-              
-          <input
-          type="date"
-          onInput = {(e) => dateFilter(e.target.value)}
-          style={{color : 'black'}}
-        />
 
-        </div> 
-      </div> 
+        { arr.length > 0 &&  
+        
+        <div className='flexInline filterBar my-2'>
+            <div>
+                <BsFunnel />
+                <button onClick={()=>displayArrays("T")} style={selectedFilter === "to do" ? highlightedButtonStyle : buttonStyle} >To Do's</button>
+                <button onClick={()=>displayArrays("M")} style={selectedFilter === "missed" ? highlightedButtonStyle : buttonStyle} >Missed Tasks</button>
+                <button onClick={()=>displayArrays("D")} style={selectedFilter === "done" ? highlightedButtonStyle : buttonStyle} >Done Tasks</button>
+                <button onClick={()=>displayArrays("")} style={selectedFilter === "all" ? highlightedButtonStyle : buttonStyle} >All </button>
+            </div>
+            <div className = 'flexInline' >
+                <span>
+                    <input type="text" placeholder='Search for Task' onInput={(e) => displayString(e.target.value)}/>
+                </span>
+                <span>
+                    <input type="date" onInput={(e) => displayDate(e.target.value)}/>
+                </span>
+            </div>
+        </div>
+        }
 
-      {
-        dataPresent && showArr.map(([key, task]) => {
-          const formatedTime = dateFormat(task.Time);
-          const showGrayLine = formatedTime.date !== prevDate;
-          let taskTime = formatedTime.hours +":" + formatedTime.minutes ;
-          prevDate = formatedTime.date; // Set the value of prevDate here
+        <h1>{filterHeading} : </h1>
+        {arr.map((task, itemKey) => {
+            const formatedTime = dateFormat(task[1].Time);
+            const showGrayLine = formatedTime.date !== prevDate;
+            prevDate = formatedTime.date; // Set the value of prevDate here
+            return(
+                <div key={itemKey} className='py-1'>
+                    {showGrayLine && (
+                        <>
+                        <div className='grayLine'>
+                        <div></div>
+                        <div></div>
+                        </div>
+                        </>
+                    )}
+                    
+                    <div className='flexInline'>
 
-          return (
-            <React.Fragment key={key}>
-              {showGrayLine && (
-                <div className='grayLine'>
-                  <div></div>
-                  <div></div>
-                </div>
-              )}
-              <TaskCards
-                key={key}
-                title={task.Title}
-                task={task.Task}
-                alarm={task.Alarm}
-                time={taskTime}
-                date ={formatedTime.date}
-                month= {formatedTime.month}
-                day= {formatedTime.day}
-                cats={task.Category}
-                collab={task.Collaborates}
-              />
-            </React.Fragment>
-          );
+                        <div className='taskCard-Dates'>
+                        {showGrayLine && (
+                            <>
+                                <p>{formatedTime.date}</p>
+                                <p>
+                                    <b>{formatedTime.month}</b><br/>
+                                    <small>{formatedTime.day}</small>
+                                </p>
+                            </>
+                        )}    
+                        </div>
+                    
+                        <div className='taskCard-Details'>
+                            <TaskCard 
+                                itemKey = {task[0]}
+                                title= {task[1].Title}
+                                task = {task[1].Task}
+                                time = {formatedTime.time}
+                                date = {formatedTime.date}
+                                day = {formatedTime.day}
+                                month = {formatedTime.month}
+                                alarm = {task[1].Alarm}
+                                cats = {task[1].Category}
+                                collab ={task[1].Collaborates}
+                                status ={task[1].Status}
+                                /> 
+                        </div>
+
+                    </div>
+                </div>        
+            );
         })}
+        <div className='addTaskIcon-container'>
+          <div className='addTaskIcon' onClick={openDialogForm}>
+              +
+          </div>
+        </div>
+    
+        <div id='dialogForm' style={{display:'none'}}>
+            <DialogForm />
+        </div>
+        { arr.length<=0 && <p>No Task found . </p> }
 
-        {!dataPresent && <p>Data is not present</p>}
-      </>
-    );
-  }
+    </div>
+  )
+}

@@ -1,24 +1,39 @@
 import React, { useState , useEffect } from 'react';
-import { BsBellFill } from 'react-icons/bs';
+import dateFormat from '../GetData.js';
 import '../css/addTask.css';
+import { BsBellFill } from "react-icons/bs";
 
-export default function AddTask() {
-  const [formTitle, setFormTitle] = useState('');
-  const [formTitleNotice, setFormTitleNotice] = useState(false);
+export default function AddTask() {  
 
-  const [formTask, setFormTask] = useState('');
-  const [formTaskNotice, setFormTaskNotice] = useState(false);
-  const [formTime, setFormTime] = useState('');
-  const [formAlarm, setFormAlarm] = useState(0);
-  const [formCat, setFormCat] = useState('');
-  const [formCatList, setFormCatList] = useState([]);
-  const [formCollab, setFormCollab] = useState('');
-  const [formCollabList, setFormCollabList] = useState([]);
+    const closeAddTask=()=>{
+        document.getElementById('addTask').style.display = 'none';
+    }
+    
+    const [keyDate , setKeyDate ] = useState(new Date());
 
-  const handleCloseBtn=(e)=>{
-    let form = document.getElementsByClassName('addTaskForm')[0];
-    form.style.display = 'none';
-  };
+    const [formTitle, setFormTitle] = useState('');
+    const [formTitleNotice, setFormTitleNotice] = useState(false);
+
+    const [formTask, setFormTask] = useState('');
+    const [formTaskNotice, setFormTaskNotice] = useState(false);
+    const [formTime, setFormTime] = useState(new Date());
+    const [formAlarm, setFormAlarm] = useState(false);
+    const [formCat, setFormCat] = useState('');
+    const [formCatList, setFormCatList] = useState([]);
+    const [formCollab, setFormCollab] = useState('');
+    const [formCollabList, setFormCollabList] = useState([]);
+    let status = "to do";
+    const formatTheDate = (d) => {
+        const dateObj = dateFormat(d);
+        const formatedDate = `${dateObj.year}-${dateObj.month}-${dateObj.date}T${dateObj.hours}:${dateObj.minutes}:${dateObj.seconds}`;
+        return formatedDate;
+    };
+    
+    useEffect(() => {
+        setKeyDate(formatTheDate(new Date())); 
+      return () => {
+      };
+    }, []);
 
   const toggleTitleNotice = (e) => {
     setFormTitle(e.target.value);
@@ -38,19 +53,17 @@ export default function AddTask() {
     setFormTaskNotice(false);
   };
 
-  useEffect(() => {
-    // Set the default value to the current date and time
-    const currentDate = new Date();
-    const year = currentDate.getFullYear();
-    const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
-    const day = currentDate.getDate().toString().padStart(2, '0');
-    const hours = currentDate.getHours().toString().padStart(2, '0');
-    const minutes = currentDate.getMinutes().toString().padStart(2, '0');
-    const seconds = currentDate.getSeconds().toString().padStart(2, '0');
-
-    const formattedDateTime = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
-    setFormTime(formattedDateTime);
-  }, []);
+  const handleStatusWithTime = (d) => {
+    let formDate = formatTheDate(d);
+    setFormTime(formDate);
+    if (formTime.year < keyDate.year || 
+        (formTime.year === keyDate.year && formTime.monthNumber > keyDate.monthNumber) || 
+        (formTime.year === keyDate.year && formTime.monthNumber === keyDate.monthNumber && formTime.date < keyDate.date)) {
+        status = "to do";
+    } else {
+        status = "missed";
+    }
+  };
 
   const handleCatAddition = () => {
     if (formCat) {
@@ -70,7 +83,7 @@ export default function AddTask() {
     setFormTitleNotice(false);
     setFormTask('');
     setFormTaskNotice(false);
-    setFormTime('');
+    setFormTime(new Date());
     setFormAlarm(0);
     setFormCat('');
     setFormCatList([]);
@@ -83,31 +96,32 @@ export default function AddTask() {
 
     // If formTitle is not entered, set it to the first 30 characters of formTask
     const taskTitle = formTitle || formTask.slice(0, 30);
-
+    
     // If formTask is not entered, set it to the first 30 characters of formTitle
     const taskValue = formTask || formTitle.slice(0, 30);
-
-    // If formTime is not entered, set it to the local current time and date
-    const timeValue = formTime || new Date().toISOString().slice(0, 16);
 
     if (taskValue !== '' && taskValue !== null) {
       const newTask = {
         Title: taskTitle,
         Task: taskValue,
         Alarm: formAlarm,
-        Time: timeValue,
+        Time: formTime,
+        Status : status,
         Category: formCatList,
         Collaborates: formCollabList,
       };
       // Retrieve existing tasks from local storage
-      const existingTasks = JSON.parse(localStorage.getItem('tasks')) || {};
+      const existingTasks = JSON.parse(localStorage.getItem('task')) || {};
 
       // Assign the new task to a unique key
-      existingTasks[timeValue] = newTask;
+      existingTasks[keyDate] = newTask;
 
       // Save the updated tasks back to local storage
       localStorage.setItem('tasks', JSON.stringify(existingTasks)); 
+    console.log(existingTasks);
+    // console.log(newTask);
       handleReset();
+      closeAddTask();
     }else{
       console.log("you have to enter a task");
     }
@@ -116,7 +130,7 @@ export default function AddTask() {
   return (
     <div className='addTaskForm'>
       <span style={{ justifyContent: 'flex-end' }}>
-        <button onClick={handleCloseBtn}>X</button>
+        <button onClick={closeAddTask}>X</button>
       </span>
       <h1>Add a New Task</h1>
       <form onSubmit={handleSubmit} onReset={handleReset}>
@@ -126,6 +140,7 @@ export default function AddTask() {
             type="text"
             id="formTitle"
             value={formTitle}
+            onInput={toggleTitleNotice}
             onChange={toggleTitleNotice}
             onBlur={handleTitleBlur}
             maxLength={40}
@@ -142,6 +157,7 @@ export default function AddTask() {
           rows="3"
           id="formTask"
           value={formTask}
+          onInput={toggleTaskNotice}
           onChange={toggleTaskNotice}
           onBlur={handleTaskBlur}
           maxLength={100}
@@ -157,18 +173,19 @@ export default function AddTask() {
             type="datetime-local"
             id="formTime"
             value={formTime}
-            onChange={(e) => setFormTime(e.target.value)}
+            onInput={(e) => handleStatusWithTime(e.target.value)}
           />
           <label>
             <input
               type="checkbox"
               onClick={() => {
-                // Toggle value 1 and 0
-                setFormAlarm(formAlarm === '1' ? '0' : '1');
+                // Toggle value true and false
+                setFormAlarm(formAlarm === 'true' ? 'false' : 'true');
               }}
               style={{display :'none'}}
             />
-            <BsBellFill style={{ color: formAlarm === '1' ? 'red' : 'initial' }} />
+            <p style={{ color: formAlarm === 'true' ? 'var(--highlighter)' : 'var(--color)' }}><BsBellFill  /></p>
+            
           </label>
         </span>
 

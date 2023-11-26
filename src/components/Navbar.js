@@ -22,7 +22,7 @@ export default function Navbar() {
 
   return (
     <>
-      <div className="navbar-Container inlineFlexStatus">
+      <div className="flexInline navbar-Container">
 
         <button onClick={openTopDropdown} className="noBtn" >
           <BsListNested />

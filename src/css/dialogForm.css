@@ -1,0 +1,75 @@
+.dialogForm{
+  z-index: 102;
+  background-color: var(--bg);
+  color : var(--color);
+  position:fixed ;
+  top : 10% ;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width : 50vw;
+  max-width: var(--appWidth);
+  height: auto;
+  padding : 2vw;
+  border-radius: 1.5vw;
+  box-sizing: border-box;
+  -webkit-box-shadow:inset 0px 0px 31px 16px rgba(0,0,0,0.21); 
+  box-shadow: inset 0px 0px 31px 16px rgba(0,0,0,0.21);
+  border: 5px double rgba(191, 190, 190, 0.534);
+}
+.dialogForm>form{
+margin: 2vh auto;
+display: flex;
+flex-direction: column;
+background-color: var(--bg);
+color : var(--color);
+}
+.dialogForm span{
+width: 100%;
+height: auto;
+display: inline-flex;
+justify-content:space-between;
+align-items:baseline;
+}
+.dialogForm>form input  {
+background-color: transparent;
+color: var(--color);
+border: 0px;
+border-bottom: 1px dotted var(--color);
+width: 70%;
+}
+.dialogForm>form textarea{
+background-color: transparent;
+color: var(--color);
+font-style: italic;
+border: 0px;
+border: 1px dotted var(--color);
+}
+.dialogForm>form label {
+font-weight: bold;
+width: 20%;
+}
+.dialogForm>form input,.dialogForm>form label{
+margin: 0.5vh 1vh;
+}
+.dialogForm>form input:focus-visible{
+padding: 1px 0.5vw;
+border: 0px;
+outline: 0px;
+border-bottom: 1px solid var(--highlighter);
+-webkit-box-shadow: inset 0px -9px 11px -6px rgba(0,0,0,0.18); 
+box-shadow: inset 0px -9px 11px -6px rgba(0,0,0,0.18);
+border-radius: 0.2vw;
+}
+.inputNotices{
+  font-size: smaller;
+  font-style: italic;
+  text-align: right;
+}
+.dialogForm button{
+border: 0px;
+font-weight: bold;
+border-radius: 0.5vw;
+}
+.formAlarmInput{
+display: none;
+}
