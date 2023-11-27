@@ -1,35 +1,67 @@
-const getData=()=>{
-  const dataObj = JSON.parse(localStorage.getItem('tasks')) || {};
-  const data = Object.entries(dataObj);
-  return data;
-}
+const getData = () => {
+  const storedData = localStorage.getItem('tasks');
+  
+  if (!storedData) {
+    return [];
+  }
+
+  try {
+    const data = JSON.parse(storedData);
+
+    if (Array.isArray(data)) {
+      // If data is already an array, return it
+      return data;
+    } else if (typeof data === 'object') {
+      // If data is an object, convert it to an array
+      return Object.entries(data);
+    } else {
+      // If data is neither an array nor an object, return an empty array
+      return [];
+    }
+  } catch (error) {
+    console.error('Error parsing data from local storage:', error);
+    return [];
+  }
+
+};
+
 let data = getData();
+
+const calculateStatus = (d1 , preStatus) => {
+  let date1 = new Date(d1).getTime();
+  let currentDate = new Date();
+  let status = "to do";
+
+  if(date1 > currentDate){
+    status = "to do";
+  }else if(date1 < currentDate){
+    if (preStatus && preStatus !== "done") {
+      status = "missed";
+    }
+  }
+  
+  return status;
+}
 
 const arrayFilter=(searchFor = "to do")=>{
   let arr = [];
-  let currTime = new Date;
   let modifiedData = [];
 
   for (let i in data) {
-      let sortTask = data[i]; //the whole tasks
-      
-      let dataTime = new Date(data[i][1].Time); 
-      if (dataTime.getTime() > currTime.getTime()) {
-          data[i][1].Status = "to do";
-        }else if (dataTime.getTime() < currTime.getTime()) {
-          if (data[i][1].Status !== "done") {
-            data[i][1].Status = "missed";
-          }
-        }
+    let sortTask = data[i]; //the whole tasks
+    
+    data[i][1].Status = calculateStatus(data[i][1].Time , data[i][1].Status );
+    
+    if (data[i][1].Status === searchFor) {
+      arr.push(sortTask);
+    }  
+    modifiedData.push(data[i]);
         
-        if (data[i][1].Status === searchFor) {
-          arr.push(sortTask);
-        }  
-        modifiedData.push(data[i]);
-        
-      }
-    localStorage.setItem('tasks', JSON.stringify(modifiedData));   
-    arr.sort((a, b) => new Date(a[1].Time).getTime() - new Date(b[1].Time).getTime()); //assending order
+  }
+
+  localStorage.setItem('tasks', JSON.stringify(modifiedData.map(entry => entry)));
+
+  arr.sort((a, b) => new Date(a[1].Time).getTime() - new Date(b[1].Time).getTime()); //assending order
 
   return arr;
 }
@@ -106,4 +138,4 @@ const dateFormat = (paramDate) => {
 };
 
 export default dateFormat;  // Default export
-export { data , getData, arrayFilter, strFilter, dateFilter };  // Named exports
+export { data , getData, arrayFilter,calculateStatus , strFilter, dateFilter };  // Named exports

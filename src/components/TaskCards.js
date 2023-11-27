@@ -3,6 +3,13 @@ import { BsCheckLg ,BsFillTrashFill,BsFillPencilFill ,BsBellFill } from "react-i
 import DialogForm from './DialogForm';
 
 export default function TaskCard(props) {
+
+    const [showDialogForm , setShowDialogForm] = useState(false);
+    
+    const closeDialogForm=()=>{
+        setShowDialogForm(false);
+    }
+
     let showAlarm = props.alarm;
     let cats = props.cats;
     let collab = props.collab;
@@ -28,32 +35,34 @@ export default function TaskCard(props) {
 
     const handleBtnBar=(x)=>{
         let task = getTask();
-        if (x === "E") {
+        if (x === "edit") {
             console.log(task[props.itemKey]);
-            document.getElementById('editForm').style.display = 'block';
-        }else if (x === "D"){
+            setShowDialogForm(true);
+        }else if (x === "done"){
             task[props.itemKey].Status = "done";
-        }else if (x === "A"){
-            task[props.itemKey].Alarm = !task[props.itemKey].Alarm;
-        }else {
+        }else if (x === "dlt"){
             delete task[props.itemKey];
+        }else {
+            task[props.itemKey].Alarm = !task[props.itemKey].Alarm;
         }
     }    
     
     return (
     <>
-        <div id='editForm' style={{display : 'none'}}>
-            <DialogForm 
-                formType = "edit"
-                keyDate = {props.itemKey} 
-                title = {props.title}
-                task = {props.time}
-                alarm = {props.alarm}
-                cat = {props.cat}
-                collab = {props.collab}
-                status = {props.status}
-            />
-        </div>
+        {showDialogForm && 
+                <DialogForm 
+                    onClose={closeDialogForm} 
+                    formType = 'edit'
+                    newKey = {props.itemKey} 
+                    title = {props.title}
+                    task = {props.task}
+                    time = {props.time}
+                    status = {props.status}
+                    alarm = {props.alarm}
+                    cat = {props.cat}
+                    collab = {props.collab}
+                    />
+        }
 
         <div className='flexInline'>
             <span>
@@ -62,9 +71,9 @@ export default function TaskCard(props) {
             <div>
                 {btnMenu && 
                     <span className='btnMenu'>
-                        <button onClick={()=>handleBtnBar("E")}><BsFillPencilFill /></button>
-                        <button onClick={()=>handleBtnBar("D")}><BsCheckLg /></button>
-                        <button onClick={()=>handleBtnBar("E")}><BsFillTrashFill /></button>
+                        <button onClick={()=>handleBtnBar("edit")}><BsFillPencilFill /></button>
+                        <button onClick={()=>handleBtnBar("done")}><BsCheckLg /></button>
+                        <button onClick={()=>handleBtnBar("dlt")}><BsFillTrashFill /></button>
                         <button onClick={()=>handleBtnBar("")} style={props.alarm === true ? highlightedButtonStyle : buttonStyle} ><BsBellFill /></button>
                     </span>
                 }

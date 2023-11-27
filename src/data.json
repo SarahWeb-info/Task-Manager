@@ -30,7 +30,7 @@ data = {
         "Title": "Write weekly report",
         "Task": "Weekly report",
         "Alarm": False,
-        "Time": "2023-12-15T08:15",
+        "Time": "2021-12-15T08:15",
         "Category": ["work"],
         "Collaborates": ["team"],
         "Status": "missed"
@@ -53,7 +53,7 @@ data = {
         "Collaborates": [],
         "Status": "to do"
     },
-    "2024-01-10T18:45": {
+    "2022-01-10T18:45": {
         "Title": "Project meeting",
         "Task": "Meeting",
         "Alarm": True,
@@ -62,23 +62,23 @@ data = {
         "Collaborates": ["team"],
         "Status": "done"
     },
-    "2024-01-18T12:00": {
+    "2021-01-18T12:00": {
         "Title": "Lunch with friends",
         "Task": "Social",
         "Alarm": False,
         "Time": "2024-01-18T12:00",
         "Category": ["personal"],
         "Collaborates": ["friends"],
-        "Status": "missed"
+        "Status": "to do"
     },
-    "2024-02-02T09:30": {
+    "2021-02-02T09:30": {
         "Title": "Client call",
         "Task": "Call",
         "Alarm": True,
         "Time": "2024-02-02T09:30",
         "Category": ["work"],
         "Collaborates": ["client"],
-        "Status": "to do"
+        "Status": "done"
     },
     "2024-02-15T20:00": {
         "Title": "Movie night",

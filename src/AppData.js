@@ -32,7 +32,7 @@ function App() {
         "Title": "Write weekly report",
         "Task": "Weekly report",
         "Alarm": false,
-        "Time": "2023-12-15T08:15",
+        "Time": "2022-12-15T08:15",
         "Category": ["work"],
         "Collaborates": ["team"],
         "Status": "missed"
@@ -68,7 +68,7 @@ function App() {
         "Title": "Lunch with friends",
         "Task": "Social",
         "Alarm": false,
-        "Time": "2024-01-18T12:00",
+        "Time": "2021-01-18T12:00",
         "Category": ["personal"],
         "Collaborates": ["friends"],
         "Status": "missed"

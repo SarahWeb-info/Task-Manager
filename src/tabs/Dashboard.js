@@ -7,8 +7,8 @@ import { BsFunnel } from "react-icons/bs";
 import Img from '../imgs/intro3.jpg';
 
 export default function Dashboard() {
-    console.clear();
-    const [ currDate , setCurrDate ] = useState(dateFormat(new Date));
+    // console.clear();
+    const [ currDate , setCurrDate ] = useState(dateFormat(new Date()));
     
     const [arr , setArr] = useState(data);
     const [filterHeading , setFilterHeading ] = useState("To Do's");
@@ -16,9 +16,8 @@ export default function Dashboard() {
     // const [ timeLeftStr , setTimeLeftStr ] = useState("");
     
     const calculateDate = (time) => {
-        let currentTime = new Date;
+        let currentTime = new Date();
         currentTime = currentTime.getTime();
-        
         
         let x = time - currentTime ;
         
@@ -37,14 +36,19 @@ export default function Dashboard() {
     useEffect(() => {
       return () => {
         setInterval(() => {
-            setCurrDate(dateFormat(new Date));
+            setCurrDate(dateFormat(new Date()));
         }, 60000);
-        
       };
     }, []);
 
+    const [showDialogForm , setShowDialogForm] = useState(false);
+    
     const openDialogForm=()=>{
-        document.getElementById('dialogForm').style.display = 'block';
+        setShowDialogForm(true);
+    }
+    
+    const closeDialogForm=()=>{
+        setShowDialogForm(false);
     }
 
     //for highlighting the active filter
@@ -98,8 +102,6 @@ export default function Dashboard() {
             </div>
         </div>
 
-        { arr.length > 0 &&  
-        
         <div className='flexInline filterBar my-2'>
             <div>
                 <BsFunnel />
@@ -117,7 +119,6 @@ export default function Dashboard() {
                 </span>
             </div>
         </div>
-        }
 
         <h1>{filterHeading} : </h1>
         {arr.map((task, itemKey) => {
@@ -175,9 +176,7 @@ export default function Dashboard() {
           </div>
         </div>
     
-        <div id='dialogForm' style={{display:'none'}}>
-            <DialogForm />
-        </div>
+        {showDialogForm && <DialogForm onClose={closeDialogForm} formType = 'add' />}
         { arr.length<=0 && <p>No Task found . </p> }
 
     </div>
