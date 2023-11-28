@@ -6,7 +6,7 @@ import { BsBellFill } from "react-icons/bs";
 export default function DialogForm({
   onClose,
   formType = 'add',
-  newKey = new Date(),
+  newKey = new Date().getTime(),
   title = "",
   task = "",
   time = "",
@@ -15,36 +15,25 @@ export default function DialogForm({
   cat = "",
   collab = ""
 }) {
-  const [keyDate , setKeyDate ] = useState(newKey);
+  
   const [formTitle, setFormTitle] = useState(title);
   const [formTitleNotice, setFormTitleNotice] = useState(false);
 
   const [formTask, setFormTask] = useState(task);
   const [formTaskNotice, setFormTaskNotice] = useState(false);
+  
   const [formTime, setFormTime] = useState(time);
+  
   const [formStatus, setFormStatus] = useState(status);
   
   const [formAlarm, setFormAlarm] = useState(alarm);
+  
   const [formCat, setFormCat] = useState(cat);
   const [formCatList, setFormCatList] = useState([]);
+  
   const [formCollab, setFormCollab] = useState(collab);
   const [formCollabList, setFormCollabList] = useState([]);
-  
-  const formatTheDate = (d) => {
-      const dateObj = dateFormat(d);
-      const formatedDate = `${dateObj.year}-${dateObj.month}-${dateObj.date}T${dateObj.time}`;
-      return formatedDate;
-  };
-
-  useEffect(() => {
-    if(formType !== 'edit'){
-      setKeyDate(formatTheDate(new Date())); 
-      console.log(`the key date is ${keyDate}`);
-    }
-    return () => {
-    };
-  }, []);
-  
+   
   const toggleTitleNotice = (e) => {
     setFormTitle(e.target.value);
     setFormTitleNotice(true);
@@ -64,12 +53,9 @@ export default function DialogForm({
   };
 
   const handleStatusWithTime = (d) => {
-    
-    let formDate = formatTheDate(d);
-    setFormTime(formDate);
-    
+    let val = new Date (d).getTime();
+    setFormTime(val);
     setFormStatus(calculateStatus( d ));
-    
   };
 
   const handleCatAddition = () => {
@@ -87,14 +73,20 @@ export default function DialogForm({
   }
 
   const handleReset = () =>{
+
     setFormTitle('');
     setFormTitleNotice(false);
+    
     setFormTask('');
     setFormTaskNotice(false);
+    
     setFormTime(new Date());
+    
     setFormAlarm(0);
+
     setFormCat('');
     setFormCatList([]);
+
     setFormCollab('');
     setFormCollabList([]);
   }
@@ -123,9 +115,8 @@ export default function DialogForm({
       // Retrieve existing tasks from local storage
       const existingTasks = JSON.parse(localStorage.getItem('tasks')) || {};
 
-      console.log(`keyDate : ${keyDate}`);
       // Assign the new task to a unique key / or using the prop key for edit
-      existingTasks[keyDate] = newTask;
+      existingTasks[newKey] = newTask;
       
       console.log(`existingTasks : ${JSON.stringify(localStorage.getItem('tasks'))}`);
 

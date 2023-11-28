@@ -27,15 +27,35 @@ const getData = () => {
 
 let data = getData();
 
-const calculateStatus = (d1 , preStatus) => {
-  let date1 = new Date(d1).getTime();
-  let currentDate = new Date();
-  let status = "to do";
+const arrayFilter=(searchFor = "to do")=>{
+  let arr = [];
+  let modifiedData = [];
 
-  if(date1 > currentDate){
-    status = "to do";
-  }else if(date1 < currentDate){
-    if (preStatus && preStatus !== "done") {
+  for (let i in data) {
+    let task = data[i]; //the whole tasks
+
+    data[i][1].Status = calculateStatus(data[i][1].Time , data[i][1].Status );
+    
+    if (task[1].Status === searchFor ) {
+      arr.push(task);
+    }  
+    modifiedData.push(task);
+        
+  }
+
+  localStorage.setItem('tasks', JSON.stringify(modifiedData));
+
+  arr.sort((a, b) => a.Time - b.Time ); //assending order
+
+  return arr;
+};
+
+const calculateStatus = (d1 , status = "to do") => {
+  let date1 = new Date(d1);
+  let currentDate = new Date();
+
+  if(date1 < currentDate){
+    if (status !== "done") {
       status = "missed";
     }
   }
@@ -43,27 +63,54 @@ const calculateStatus = (d1 , preStatus) => {
   return status;
 }
 
-const arrayFilter=(searchFor = "to do")=>{
-  let arr = [];
-  let modifiedData = [];
+const calculateTimeLeft = ( ) => {
 
-  for (let i in data) {
-    let sortTask = data[i]; //the whole tasks
-    
-    data[i][1].Status = calculateStatus(data[i][1].Time , data[i][1].Status );
-    
-    if (data[i][1].Status === searchFor) {
-      arr.push(sortTask);
-    }  
-    modifiedData.push(data[i]);
-        
+  let arr = arrayFilter('to do');
+  let arrTime = arr[0][1].Time;
+
+  let nextTaskDate = new Date(arrTime).getTime();
+  const currentDate = new Date().getTime(); // Current date and time
+  
+  if (nextTaskDate < currentDate) {
+    return " ";
   }
-
-  localStorage.setItem('tasks', JSON.stringify(modifiedData.map(entry => entry)));
-
-  arr.sort((a, b) => new Date(a[1].Time).getTime() - new Date(b[1].Time).getTime()); //assending order
-
-  return arr;
+  const timeDifference = nextTaskDate - currentDate;
+  
+  // Convert the time difference to years, months, days, hours, minutes, and seconds
+  const years = Math.floor(timeDifference / (365 * 24 * 60 * 60 * 1000));
+  const months = Math.floor((timeDifference % (365 * 24 * 60 * 60 * 1000)) / (30 * 24 * 60 * 60 * 1000));
+  const days = Math.floor((timeDifference % (30 * 24 * 60 * 60 * 1000)) / (24 * 60 * 60 * 1000));
+  const hours = Math.floor((timeDifference % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
+  const minutes = Math.floor((timeDifference % (60 * 60 * 1000)) / (60 * 1000));
+  const seconds = Math.floor((timeDifference % (60 * 1000)) / 1000);
+  
+  let timeLeft = 'Next Task in ';
+  let a = 1;
+  if (years > 0 && a <= 3) {
+    timeLeft += `${years} years `;
+    a++;
+  }
+  if (months > 0 && a <= 3) {
+    timeLeft += `${months} months `;
+    a++;
+  }
+  if (days > 0 && a <= 3) {
+    timeLeft += `${days} days `;
+    a++;
+  }
+  if (hours > 0 && a <= 3) {
+    timeLeft += `${hours} hours `;
+    a++;
+  }  
+  if (minutes > 0 && a <= 3) {
+    timeLeft += `${minutes} minutes `;
+    a++;
+  }
+  if (seconds > 0 && a <= 3) {
+    timeLeft += `${seconds} seconds`;
+    a++;
+  }
+  return timeLeft;
 }
 
 const strFilter = (inputValue) =>{
@@ -72,29 +119,31 @@ const strFilter = (inputValue) =>{
     let searchFor = inputValue.toLowerCase();
     
     for (let i in data) {
-      let sortTask = data[i]; //the whole tasks
+      let task = data[i]; //the whole tasks
       
       let searchIn = data[i][1].Title + data[i][1].Task + data[i][1].Category + data[i][1].Collaborates;
       searchIn = searchIn.toLowerCase();
 
       if (searchIn.includes(searchFor) ) {
-        arr.push(sortTask);
+        arr.push(task);
       }  
     }
     arr.sort((a, b) => new Date(a[1].Time) - new Date(b[1].Time)); // accending order
     return arr;
   }
 
-  const dateFilter =(inputValue)=>{
+  const dateFilter =(val)=>{
     let arr = [];
-    let inputDate = dateFormat(inputValue);
+    let inputDate = dateObj(val);
 
     for (let i in data) {
-      let sortTask = data[i]; //the whole tasks
-      let taskDate = dateFormat(data[i][1].Time);
+
+      let task = data[i]; //the whole tasks
+      let taskDate = dateObj(task[1].Time);
+      
       // here we have to compare the dates (not time) -taskDate and inputDate
       if( taskDate.year === inputDate.year && taskDate.monthNumber === inputDate.monthNumber && taskDate.date === inputDate.date ){
-        arr.push(sortTask);
+        arr.push(task);
         console.log("date matched ");
       }
     }
@@ -103,39 +152,32 @@ const strFilter = (inputValue) =>{
   }
 
 
-const dateFormat = (paramDate) => {
-    let dateObject;
 
-    // Check if paramDate is a string, then convert to Date object
-    if (typeof paramDate === 'string') {
-        dateObject = new Date(paramDate);
-    } else if (paramDate instanceof Date) {
-        dateObject = paramDate;
-    } else {
-        throw new Error('Error .There is no date or a string to calculate.');
-    }
+const dateObj = (paramDate) => {
 
-    // Extract individual components
-    const year = dateObject.getFullYear();
-    const monthLong = dateObject.toLocaleDateString('en-US', { month: 'long' })
-    const month = dateObject.toLocaleDateString('en-US', { month: 'short' });
-    const monthNumber = dateObject.getMonth() + 1;
-    const date = dateObject.getDate();
-    const day = dateObject.toLocaleDateString('en-US', { weekday: 'long' });
-    const time = dateObject.toLocaleTimeString('en-US', { hour12: true, hour: 'numeric', minute: 'numeric' });
-    const timeLong = dateObject.toLocaleTimeString('en-US', { hour12: true });
-    // Return an object with the extracted components
-    return {
-        year,
-        monthLong,
-        month,
-        monthNumber,
-        date,
-        day,
-        time,
-        timeLong
-    };
+  let dateObject = new Date(paramDate);
+  // Extract individual components
+  const year = dateObject.getFullYear();
+  const monthLong = dateObject.toLocaleDateString('en-US', { month: 'long' })
+  const month = dateObject.toLocaleDateString('en-US', { month: 'short' });
+  const monthNumber = dateObject.getMonth() + 1;
+  const date = dateObject.getDate();
+  const day = dateObject.toLocaleDateString('en-US', { weekday: 'long' });
+  const time = dateObject.toLocaleTimeString('en-US', { hour12: true, hour: 'numeric', minute: 'numeric' });
+  const timeLong = dateObject.toLocaleTimeString('en-US', { hour12: true });
+  // Return an object with the extracted components
+
+  return {
+      year,
+      monthLong,
+      month,
+      monthNumber,
+      date,
+      day,
+      time,
+      timeLong
+  };
 };
 
-export default dateFormat;  // Default export
-export { data , getData, arrayFilter,calculateStatus , strFilter, dateFilter };  // Named exports
+export default data;  // Default export
+export { data , arrayFilter, dateObj, calculateTimeLeft, getData, calculateStatus , strFilter, dateFilter };  // Named exports

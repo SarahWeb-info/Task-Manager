@@ -1,5 +1,5 @@
 import React, { useState  , useEffect } from 'react'
-import dateFormat ,{ data , getData ,arrayFilter,strFilter,dateFilter} from '../GetData.js';
+import { arrayFilter, dateObj ,calculateTimeLeft, getData ,strFilter,dateFilter} from '../GetData.js';
 import TaskCard from '../components/TaskCards.js';
 import DialogForm from '../components/DialogForm.js';
 import "../css/dashboard.css";
@@ -8,41 +8,57 @@ import Img from '../imgs/intro3.jpg';
 
 export default function Dashboard() {
     // console.clear();
-    const [ currDate , setCurrDate ] = useState(dateFormat(new Date()));
-    
-    const [arr , setArr] = useState(data);
-    const [filterHeading , setFilterHeading ] = useState("To Do's");
+    const [ currDate , setCurrDate ] = useState(dateObj(new Date()));
+    let data = getData();
+    const [arr , setArr] = useState(arrayFilter('to do'));
+    const [searchTitle , setSearchTitle] = useState("To Do's");
 
-    // const [ timeLeftStr , setTimeLeftStr ] = useState("");
-    
-    const calculateDate = (time) => {
-        let currentTime = new Date();
-        currentTime = currentTime.getTime();
-        
-        let x = time - currentTime ;
-        
-        if ( x > 0 ) {
-            console.log("caluclate the time left");
-        }else{
-            console.log("keep the timeLeftStr empty");
-        }
-    }
-    
-    if (arr.length > 0) {
-        let timeLeft  = new Date(arr[0][1].Time);
-        calculateDate(timeLeft.getTime());
-    }
+    const [ timeLeft , setTimeLeft ] = useState(calculateTimeLeft());
 
     useEffect(() => {
-      return () => {
         setInterval(() => {
-            setCurrDate(dateFormat(new Date()));
+            setCurrDate(dateObj(new Date()));
+            setTimeLeft(calculateTimeLeft());
+            data = getData();
         }, 60000);
-      };
-    }, []);
-
-    const [showDialogForm , setShowDialogForm] = useState(false);
     
+      return () => {
+      }
+    }, [])
+
+    const searchAll = ()=>{
+        setArr(data);
+        setSearchTitle("All Tasks");
+        setSelectedFilter("all");
+    }
+
+    
+    const searchArray = (x)=>{
+        setArr(arrayFilter(x));
+        if (x === "missed") {
+            setSearchTitle("Oops ! You missed these ..");
+            setSelectedFilter("missed");
+        }else if (x === "done") {
+            setSearchTitle("All Done :)");
+            setSelectedFilter("done");
+        }else{
+            setSearchTitle("To Do's");
+            setSelectedFilter("to do");
+        } 
+    }
+    
+    const displayString=(str)=>{
+        setArr(strFilter(str));
+        setSearchTitle(`Search results for ${str}`);
+
+    }
+    
+    const displayDate=(d)=>{
+        setArr(dateFilter(d));
+        setSearchTitle(`Search results for ${d}`);
+    }
+    
+    const [showDialogForm , setShowDialogForm] = useState(false);
     const openDialogForm=()=>{
         setShowDialogForm(true);
     }
@@ -61,54 +77,25 @@ export default function Dashboard() {
         color: 'var(--highlighter)', // Set the highlighted color
     };
 
-    const displayArrays=(x)=>{
-        if (x === "M") {
-            setFilterHeading("Tasks Missed");
-            setSelectedFilter("missed");
-            setArr(arrayFilter("missed"));
-        }else if (x === "D"){
-            setFilterHeading("Tasks Done");
-            setSelectedFilter("done");
-            setArr(arrayFilter("done"));
-        }else if (x === "T"){
-            setFilterHeading("To Do's");
-            setSelectedFilter("to do");
-            setArr(arrayFilter("to do"));
-        }else {
-            setFilterHeading("All Tasks");
-            setSelectedFilter("all");
-            setArr(data);
-        }
-    }
-
-    const displayString=(str)=>{
-        setArr(strFilter(str));
-        setFilterHeading(`Search Results for ${str}`);
-    }
-
-    const displayDate=(d)=>{
-        setArr(dateFilter(d));
-        setFilterHeading(`Search Results for ${d}`);
-    }
-
   let prevDate;
+
   return (
     <div>
         <div className='flexInline dayCard'>
             <img src={Img} alt=""/>
             <div className='flex-column justify-content-center align-items-end'>
                 <h2>{currDate.time} {currDate.monthLong} ' {currDate.date}</h2>
-                <p>22 minutes left</p>
+                <p>{timeLeft}</p>
             </div>
         </div>
 
         <div className='flexInline filterBar my-2'>
             <div>
                 <BsFunnel />
-                <button onClick={()=>displayArrays("T")} style={selectedFilter === "to do" ? highlightedButtonStyle : buttonStyle} >To Do's</button>
-                <button onClick={()=>displayArrays("M")} style={selectedFilter === "missed" ? highlightedButtonStyle : buttonStyle} >Missed Tasks</button>
-                <button onClick={()=>displayArrays("D")} style={selectedFilter === "done" ? highlightedButtonStyle : buttonStyle} >Done Tasks</button>
-                <button onClick={()=>displayArrays("")} style={selectedFilter === "all" ? highlightedButtonStyle : buttonStyle} >All </button>
+                <button onClick={()=>searchArray("to do")} style={selectedFilter === "to do" ? highlightedButtonStyle : buttonStyle} >To Do's</button>
+                <button onClick={()=>searchArray("missed")} style={selectedFilter === "missed" ? highlightedButtonStyle : buttonStyle} >Missed Tasks</button>
+                <button onClick={()=>searchArray("done")} style={selectedFilter === "done" ? highlightedButtonStyle : buttonStyle} >Done Tasks</button>
+                <button onClick={searchAll} style={selectedFilter === "all" ? highlightedButtonStyle : buttonStyle} >All </button>
             </div>
             <div className = 'flexInline' >
                 <span>
@@ -120,9 +107,9 @@ export default function Dashboard() {
             </div>
         </div>
 
-        <h1>{filterHeading} : </h1>
+        <h1>{searchTitle}  </h1>
         {arr.map((task, itemKey) => {
-            const formatedTime = dateFormat(task[1].Time);
+            const formatedTime = dateObj(task[1].Time);
             const showGrayLine = formatedTime.date !== prevDate;
             prevDate = formatedTime.date; // Set the value of prevDate here
             return(
@@ -177,7 +164,7 @@ export default function Dashboard() {
         </div>
     
         {showDialogForm && <DialogForm onClose={closeDialogForm} formType = 'add' />}
-        { arr.length<=0 && <p>No Task found . </p> }
+        { arr.length<=0 && <p>No Tasks found . </p> }
 
     </div>
   )
