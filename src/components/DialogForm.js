@@ -1,5 +1,5 @@
 import React , {useState , useEffect} from 'react';
-import dateFormat ,{ calculateStatus } from '../GetData.js';
+import {getData, calculateStatus } from '../GetData.js';
 import '../css/dialogForm.css';
 import { BsBellFill } from "react-icons/bs";
 
@@ -9,11 +9,11 @@ export default function DialogForm({
   newKey = new Date().getTime(),
   title = "",
   task = "",
-  time = "",
+  time = new Date(),
   status = "to do",
   alarm = false,
-  cat = "",
-  collab = ""
+  cat = [],
+  collab = []
 }) {
   
   const [formTitle, setFormTitle] = useState(title);
@@ -23,16 +23,15 @@ export default function DialogForm({
   const [formTaskNotice, setFormTaskNotice] = useState(false);
   
   const [formTime, setFormTime] = useState(time);
-  
   const [formStatus, setFormStatus] = useState(status);
   
   const [formAlarm, setFormAlarm] = useState(alarm);
   
-  const [formCat, setFormCat] = useState(cat);
-  const [formCatList, setFormCatList] = useState([]);
+  const [formCat, setFormCat] = useState("");
+  const [formCatList, setFormCatList] = useState(cat);
   
-  const [formCollab, setFormCollab] = useState(collab);
-  const [formCollabList, setFormCollabList] = useState([]);
+  const [formCollab, setFormCollab] = useState("");
+  const [formCollabList, setFormCollabList] = useState(collab);
    
   const toggleTitleNotice = (e) => {
     setFormTitle(e.target.value);
@@ -53,7 +52,7 @@ export default function DialogForm({
   };
 
   const handleStatusWithTime = (d) => {
-    let val = new Date (d).getTime();
+    let val = new Date (d);
     setFormTime(val);
     setFormStatus(calculateStatus( d ));
   };
@@ -101,6 +100,13 @@ export default function DialogForm({
     const taskValue = formTask || formTitle.slice(0, 30);
 
     if (taskValue !== '' && taskValue !== null) {
+      
+      if (formCat.length>1) {
+        setFormCatList([...formCatList, formCat]);
+      }
+      if (formCollab.length>1) {
+        setFormCollabList([...formCollabList, formCollab]);
+      }
 
       const newTask = {
         Title: taskTitle,
@@ -113,17 +119,34 @@ export default function DialogForm({
       };
 
       // Retrieve existing tasks from local storage
-      const existingTasks = JSON.parse(localStorage.getItem('tasks')) || {};
-
-      // Assign the new task to a unique key / or using the prop key for edit
-      existingTasks[newKey] = newTask;
+      let existingTasks = getData();
       
-      console.log(`existingTasks : ${JSON.stringify(localStorage.getItem('tasks'))}`);
-
-      // Save the updated tasks back to local storage
-      localStorage.setItem('tasks', JSON.stringify(existingTasks)); 
+      //updating task
+      if(formType === 'edit'){
+        for(let i in existingTasks){
+          
+          if (existingTasks[i][0] === newKey) {
+            existingTasks[i][1] = newTask;
+            break ; 
+          }
+        }
+      }else{ 
+        // adding a new task
+        let l = existingTasks.length;
+        existingTasks[l] =[newKey.toString() , newTask ] ;
+        console.log(existingTasks[l]);
+      }
       
+      try {
+        // Save the updated tasks back to local storage
+        localStorage.setItem('tasks', JSON.stringify(existingTasks));
+        console.log('Tasks saved successfully');
+        console.log(localStorage.getItem('tasks'));
 
+      } catch (error) {
+        console.error('Error saving tasks to local storage:', error);
+      }
+      
       if(formType !== 'edit'){
         handleReset();
       }

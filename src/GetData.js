@@ -16,6 +16,7 @@ const getData = () => {
       return Object.entries(data);
     } else {
       // If data is neither an array nor an object, return an empty array
+      console.log("no data found");
       return [];
     }
   } catch (error) {

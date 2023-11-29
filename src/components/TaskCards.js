@@ -11,7 +11,7 @@ export default function TaskCard(props) {
     }
 
     let showAlarm = props.alarm;
-    let cats = props.cats;
+    let cat = props.cat;
     let collab = props.collab;
 
     const [btnMenu , setBtnMenu] = useState(false);
@@ -29,6 +29,10 @@ export default function TaskCard(props) {
         return data;
     }
     
+    const setTask = (data)=>{
+        localStorage.setItem('tasks', JSON.stringify(data));
+    }
+
     const handleBtnMenu =() =>{
         setBtnMenu(!btnMenu);
     }
@@ -36,14 +40,16 @@ export default function TaskCard(props) {
     const handleBtnBar=(x)=>{
         let task = getTask();
         if (x === "edit") {
-            console.log(task[props.itemKey]);
             setShowDialogForm(true);
         }else if (x === "done"){
             task[props.itemKey].Status = "done";
+            setTask(task);
         }else if (x === "dlt"){
             delete task[props.itemKey];
+            setTask(task);
         }else {
             task[props.itemKey].Alarm = !task[props.itemKey].Alarm;
+            setTask(task);
         }
     }    
     
@@ -56,7 +62,7 @@ export default function TaskCard(props) {
                     newKey = {props.itemKey} 
                     title = {props.title}
                     task = {props.task}
-                    time = {props.time}
+                    time = {props.formTime}
                     status = {props.status}
                     alarm = {props.alarm}
                     cat = {props.cat}
@@ -88,9 +94,9 @@ export default function TaskCard(props) {
 
             <div className='flexInline'>
 
-                {props.cats.length>0 && 
+                {props.cat.length>0 && 
                     <div  className = 'd-inline-flex catBadges'>
-                        {cats.map((item, index) => {
+                        {cat.map((item, index) => {
                             let color ;
                             if (item === 'work') {
                                 color = "blue";

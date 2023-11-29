@@ -142,12 +142,13 @@ export default function Dashboard() {
                                 itemKey = {task[0]}
                                 title= {task[1].Title}
                                 task = {task[1].Task}
+                                formTime = {task[1].Time}
                                 time = {formatedTime.time}
                                 date = {formatedTime.date}
                                 day = {formatedTime.day}
                                 month = {formatedTime.month}
                                 alarm = {task[1].Alarm}
-                                cats = {task[1].Category}
+                                cat = {task[1].Category}
                                 collab ={task[1].Collaborates}
                                 status ={task[1].Status}
                                 /> 
