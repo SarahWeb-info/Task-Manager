@@ -1,5 +1,5 @@
 import React , {useState , useEffect} from 'react';
-import {getData, calculateStatus } from '../GetData.js';
+import { getData } from '../AppData.js';
 import '../css/dialogForm.css';
 import { BsBellFill } from "react-icons/bs";
 
@@ -54,7 +54,7 @@ export default function DialogForm({
   const handleStatusWithTime = (d) => {
     let val = new Date (d);
     setFormTime(val);
-    setFormStatus(calculateStatus( d ));
+    // setFormStatus(calculateStatus( d ));
   };
 
   const handleCatAddition = () => {
@@ -164,7 +164,7 @@ return (
     <h1>Add a New Task</h1>
     <form onSubmit={handleSubmit} onReset={handleReset}>
       <span>
-        <label htmlFor="formTitle">Title</label>
+        <label htmlFor="formTitle">Task</label>
         <input
           type="text"
           id="formTitle"
@@ -181,7 +181,7 @@ return (
       {formTitleNotice && <p className='inputNotices'>Max 40 characters including spaces.</p>}
       </span>
       
-      <label htmlFor="formTask">Task</label>
+      <label htmlFor="formTask">Detail</label>
       <textarea
         rows="3"
         id="formTask"
@@ -231,11 +231,11 @@ return (
         </button>
       </span>
 
-      <span id="formCatList">
+      <div id="formCatList">
       {formCatList.map((cat, index) => (
           <span key={index}>{cat}</span>
       ))}
-      </span>
+      </div>
 
       <span>
         <label htmlFor="formCollab">Collaborators</label>
@@ -249,11 +249,11 @@ return (
               +
           </button>
       </span>
-      <span id="formCollabList">
+      <div id="formCollabList">
           {formCollabList.map((collab, index) => (
               <span key={index}>{collab}</span>
           ))}
-      </span>
+      </div>
 
       <span style={{ justifyContent: 'space-around', margin: '2vh auto' }}>
         {formType !== 'edit' && <button type="reset">Reset</button>}

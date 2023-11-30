@@ -1,5 +1,6 @@
-import React, { useState  , useEffect } from 'react'
-import { arrayFilter, dateObj ,calculateTimeLeft, getData ,strFilter,dateFilter} from '../GetData.js';
+import React, { useState  , useEffect } from 'react';
+import { getData } from '../AppData.js';
+import { arrayFilter, dateObj ,calculateTimeLeft, strFilter,dateFilter} from '../GetData.js';
 import TaskCard from '../components/TaskCards.js';
 import DialogForm from '../components/DialogForm.js';
 import "../css/dashboard.css";
@@ -9,7 +10,7 @@ import Img from '../imgs/intro3.jpg';
 export default function Dashboard() {
     // console.clear();
     const [ currDate , setCurrDate ] = useState(dateObj(new Date()));
-    let data = getData();
+    let data = getData(); // do I need to do this ? 
     const [arr , setArr] = useState(arrayFilter('to do'));
     const [searchTitle , setSearchTitle] = useState("To Do's");
 
@@ -32,7 +33,6 @@ export default function Dashboard() {
         setSelectedFilter("all");
     }
 
-    
     const searchArray = (x)=>{
         setArr(arrayFilter(x));
         if (x === "missed") {

@@ -1,4 +1,5 @@
 import React , {useState} from 'react'
+import { editDone , editDlt , editAlarm } from '../modifyData';
 import { BsCheckLg ,BsFillTrashFill,BsFillPencilFill ,BsBellFill } from "react-icons/bs";
 import DialogForm from './DialogForm';
 
@@ -24,33 +25,12 @@ export default function TaskCard(props) {
         color: 'var(--highlighter)', // Set the highlighted color
     };
 
-    const getTask = ()=>{
-        const data = JSON.parse(localStorage.getItem('task')) || {};
-        return data;
-    }
-    
-    const setTask = (data)=>{
-        localStorage.setItem('tasks', JSON.stringify(data));
-    }
-
     const handleBtnMenu =() =>{
         setBtnMenu(!btnMenu);
     }
 
-    const handleBtnBar=(x)=>{
-        let task = getTask();
-        if (x === "edit") {
-            setShowDialogForm(true);
-        }else if (x === "done"){
-            task[props.itemKey].Status = "done";
-            setTask(task);
-        }else if (x === "dlt"){
-            delete task[props.itemKey];
-            setTask(task);
-        }else {
-            task[props.itemKey].Alarm = !task[props.itemKey].Alarm;
-            setTask(task);
-        }
+    const editForm = (x) =>{
+        setShowDialogForm(true);
     }    
     
     return (
@@ -77,10 +57,10 @@ export default function TaskCard(props) {
             <div>
                 {btnMenu && 
                     <span className='btnMenu'>
-                        <button onClick={()=>handleBtnBar("edit")}><BsFillPencilFill /></button>
-                        <button onClick={()=>handleBtnBar("done")}><BsCheckLg /></button>
-                        <button onClick={()=>handleBtnBar("dlt")}><BsFillTrashFill /></button>
-                        <button onClick={()=>handleBtnBar("")} style={props.alarm === true ? highlightedButtonStyle : buttonStyle} ><BsBellFill /></button>
+                        <button onClick={editForm}><BsFillPencilFill /></button>
+                        <button onClick={editDone(props.itemKey)}><BsCheckLg /></button>
+                        <button onClick={editDlt(props.itemKey)}><BsFillTrashFill /></button>
+                        <button onClick={editAlarm(props.itemKey)} style={props.alarm === true ? highlightedButtonStyle : buttonStyle} ><BsBellFill /></button>
                     </span>
                 }
                 <button className='noBtn' onClick={handleBtnMenu}>...</button>

@@ -20,7 +20,8 @@
 margin: 2vh auto;
 display: flex;
 flex-direction: column;
-background-color: var(--bg);
+/* background-color: var(--bg); */
+background-color: transparent;
 color : var(--color);
 }
 .dialogForm span{
@@ -73,3 +74,11 @@ border-radius: 0.5vw;
 .formAlarmInput{
 display: none;
 }
+#formCatList>span , #formCollabList>span{
+  -webkit-box-shadow:inset 0px 0px 13px 2px rgba(0,0,0,0.21); 
+  box-shadow: inset 0px 0px 13px 2px rgba(0,0,0,0.21);
+  width: fit-content;
+  padding: 0 1vw;
+  margin-right: 1vw;
+  border-radius: 1.5vw;
+} 

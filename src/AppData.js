@@ -1,7 +1,7 @@
-
-function App() {
-  let data = {
-    "1636689503000": {
+let data = [
+    [
+      "1636689503000",
+      {
         "Title": "Get the recipes of Tim cookies",
         "Task": "new recipe",
         "Alarm": false,
@@ -9,8 +9,11 @@ function App() {
         "Category": [],
         "Collaborates": [],
         "Status": "done"
-    },
-    "1636670343000": {
+      }
+    ],
+    [
+      "1636670343000",
+      {
         "Title": "Check the task",
         "Task": "check the task",
         "Alarm": true,
@@ -18,8 +21,11 @@ function App() {
         "Category": [],
         "Collaborates": [],
         "Status": "missed"
-    },
-    "1638979143000": {
+      }
+    ],
+    [
+      "1638979143000",
+      {
         "Title": "Check 2",
         "Task": "Check 2",
         "Alarm": true,
@@ -27,8 +33,11 @@ function App() {
         "Category": ["work", "app"],
         "Collaborates": ["alone", "chatgpt"],
         "Status": "to do"
-    },
-    "1639530900000": {
+      }
+    ],
+    [
+      "1639530900000",
+      {
         "Title": "Write weekly report",
         "Task": "Weekly report",
         "Alarm": false,
@@ -36,8 +45,11 @@ function App() {
         "Category": ["work"],
         "Collaborates": ["team"],
         "Status": "missed"
-    },
-    "1640020200000": {
+      }
+    ],
+    [
+      "1640020200000",
+      {
         "Title": "Gym workout",
         "Task": "Exercise",
         "Alarm": true,
@@ -45,8 +57,11 @@ function App() {
         "Category": ["health"],
         "Collaborates": [],
         "Status": "done"
-    },
-    "1641405600000": {
+      }
+    ],
+    [
+      "1641405600000",
+      {
         "Title": "Read a chapter from a book",
         "Task": "Reading",
         "Alarm": false,
@@ -54,8 +69,11 @@ function App() {
         "Category": ["personal"],
         "Collaborates": [],
         "Status": "to do"
-    },
-    "1641830700000": {
+      }
+    ],
+    [
+      "1641830700000",
+      {
         "Title": "Project meeting",
         "Task": "Meeting",
         "Alarm": true,
@@ -63,8 +81,11 @@ function App() {
         "Category": ["work"],
         "Collaborates": ["team"],
         "Status": "done"
-    },
-    "1642477200000": {
+      }
+    ],
+    [
+      "1642477200000",
+      {
         "Title": "Lunch with friends",
         "Task": "Social",
         "Alarm": false,
@@ -72,8 +93,11 @@ function App() {
         "Category": ["personal"],
         "Collaborates": ["friends"],
         "Status": "missed"
-    },
-    "1643651400000": {
+      }
+    ],
+    [
+      "1643651400000",
+      {
         "Title": "Client call",
         "Task": "Call",
         "Alarm": true,
@@ -81,8 +105,11 @@ function App() {
         "Category": ["work"],
         "Collaborates": ["client"],
         "Status": "to do"
-    },
-    "1644817600000": {
+      }
+    ],
+    [
+      "1644817600000",
+      {
         "Title": "Movie night",
         "Task": "Entertainment",
         "Alarm": true,
@@ -90,19 +117,31 @@ function App() {
         "Category": ["personal"],
         "Collaborates": ["family"],
         "Status": "to do"
-    }
-}
-
-  // Convert JSON to string
-  const jsonString = JSON.stringify(data);
+      }
+    ]
+  ];
   
-  // Save to local storage
-  localStorage.setItem('tasks', jsonString);
-  return (
-    <div className="App">
-      data saved in local storage
-    </div>
-  );
-}
+ const getData = () => {
+    let currentDate = new Date();
+  
+    for (let i in data) {
+      let time = data[i][1].Time;
+      let status = data[i][1].Status;
+  
+      if(time < currentDate){
+        if (status !== "done") {
+          data[i][1].Status = "missed";
+        }
+      }
+    }
+    return data;
+  };
+ 
 
-export default App;
+const setData = (newData) => {
+  data = newData;
+  return data;
+};
+
+export default data;
+export { getData, setData };
