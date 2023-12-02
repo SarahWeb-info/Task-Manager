@@ -4,6 +4,10 @@ let data = getData();
 const arrayFilter=(searchFor = "to do")=>{
   let arr = [];
 
+  if(searchFor === "all"){
+    return data;
+  }
+
   for (let i in data) {
     let task = data[i]; //the whole tasks
 
@@ -11,6 +15,7 @@ const arrayFilter=(searchFor = "to do")=>{
       arr.push(task);
     }  
   }
+  
 
   arr.sort((a, b) => a.Time - b.Time ); //assending order
 
@@ -22,13 +27,23 @@ const calculateTimeLeft = ( ) => {
 
   let arr = arrayFilter('to do');
   let arrTime = arr[0][1].Time;
-
+  
   let nextTaskDate = new Date(arrTime).getTime();
   const currentDate = new Date().getTime(); // Current date and time
+  let timeStyle = "timeInfo";
+  let timeStr = "";
   
   if (nextTaskDate < currentDate) {
-    return " ";
+    timeStyle = "timeInfo";
+    timeStr = "";
+    return {timeStr , timeStyle };
+
+  }else if(nextTaskDate === currentDate){
+    timeStyle = "timeDeadline";
+    timeStr = "Its time to do your task";
+    return {timeStr , timeStyle };
   }
+
   const timeDifference = nextTaskDate - currentDate;
   
   // Convert the time difference to years, months, days, hours, minutes, and seconds
@@ -39,33 +54,38 @@ const calculateTimeLeft = ( ) => {
   const minutes = Math.floor((timeDifference % (60 * 60 * 1000)) / (60 * 1000));
   const seconds = Math.floor((timeDifference % (60 * 1000)) / 1000);
   
-  let timeLeft = 'Next Task in ';
+  timeStr = 'Next Task in ';
   let a = 1;
   if (years > 0 && a <= 3) {
-    timeLeft += `${years} years `;
+    timeStr += `${years} years `;
     a++;
   }
   if (months > 0 && a <= 3) {
-    timeLeft += `${months} months `;
+    timeStr += `${months} months `;
     a++;
   }
   if (days > 0 && a <= 3) {
-    timeLeft += `${days} days `;
+    timeStr += `${days} days `;
     a++;
   }
   if (hours > 0 && a <= 3) {
-    timeLeft += `${hours} hours `;
+    timeStr += `${hours} hours `;
     a++;
+    if (hours > 3) {
+      timeStyle = "timeWarning";
+    }
   }  
   if (minutes > 0 && a <= 3) {
-    timeLeft += `${minutes} minutes `;
+    timeStr += `${minutes} minutes `;
     a++;
+    timeStyle = "timeWarning";
   }
   if (seconds > 0 && a <= 3) {
-    timeLeft += `${seconds} seconds`;
+    timeStr += `${seconds} seconds`;
     a++;
+    timeStyle = "timeWarning";
   }
-  return timeLeft;
+  return {timeStr , timeStyle };
 }
 
 const strFilter = (inputValue) =>{

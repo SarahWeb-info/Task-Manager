@@ -231,9 +231,9 @@ return (
         </button>
       </span>
 
-      <div id="formCatList">
+      <div className='flexInline flexStart'>
       {formCatList.map((cat, index) => (
-          <span key={index}>{cat}</span>
+          <span className='bullets' key={index}>{cat}</span>
       ))}
       </div>
 
@@ -249,9 +249,9 @@ return (
               +
           </button>
       </span>
-      <div id="formCollabList">
+      <div className='flexInline flexStart'>
           {formCollabList.map((collab, index) => (
-              <span key={index}>{collab}</span>
+              <span className='bullets' key={index}>{collab}</span>
           ))}
       </div>
 

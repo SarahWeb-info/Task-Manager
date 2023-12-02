@@ -13,6 +13,30 @@
   padding-right: 2vw;
   text-align: right;
 }
+.timeInfo{
+  color : var(--bg);
+  background-color: transparent;
+}
+.timeWarning{
+  color : var(--highlighter);
+  background-color: transparent;
+}
+.timeDeadline{
+  color : red;
+  background-color: transparent;
+  animation: blink-animation 1s steps(5, start) infinite;
+  -webkit-animation: blink-animation 1s steps(5, start) infinite;
+}
+@keyframes blink-animation {
+  to {
+    visibility: hidden;
+  }
+}
+@-webkit-keyframes blink-animation {
+  to {
+    visibility: hidden;
+  }
+}
 
 .filterBar{
   box-sizing: border-box;

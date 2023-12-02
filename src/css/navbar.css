@@ -19,8 +19,15 @@
     padding: 2px 1vh;
     color : var(--bg);
     background-color: var(--color);
+    font-size: medium;
+    font-style: normal;
+    font-weight: bolder;
+    width: fit-content;
   }
-  .myDropmenu button{
+  .myDropmenu a:hover{
+    color : var(--highlighter);
+  }
+  .btnUp{
     width: 100%;
     text-align: left;
     border: 1px solid transparent;

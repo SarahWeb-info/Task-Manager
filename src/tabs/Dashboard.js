@@ -1,5 +1,4 @@
-import React, { useState  , useEffect } from 'react';
-import { getData } from '../AppData.js';
+import React, { useState ,useEffect  } from 'react';
 import { arrayFilter, dateObj ,calculateTimeLeft, strFilter,dateFilter} from '../GetData.js';
 import TaskCard from '../components/TaskCards.js';
 import DialogForm from '../components/DialogForm.js';
@@ -8,43 +7,54 @@ import { BsFunnel } from "react-icons/bs";
 import Img from '../imgs/intro3.jpg';
 
 export default function Dashboard() {
-    // console.clear();
+    const searchParams = new URLSearchParams(window.location.search);
+    const filter = searchParams.get('filter');
+    console.clear();
+    console.log(filter);
+    
+    let str = "to do";
+    if (filter) {
+        str = filter;
+    }
+
     const [ currDate , setCurrDate ] = useState(dateObj(new Date()));
-    let data = getData(); // do I need to do this ? 
-    const [arr , setArr] = useState(arrayFilter('to do'));
-    const [searchTitle , setSearchTitle] = useState("To Do's");
+    const [arr , setArr] = useState(arrayFilter(str));
+    const capitalizedStr = str.charAt(0).toUpperCase() + str.slice(1);
+    const [searchTitle , setSearchTitle] = useState(capitalizedStr);
 
     const [ timeLeft , setTimeLeft ] = useState(calculateTimeLeft());
 
     useEffect(() => {
-        setInterval(() => {
+        const intervalId = setInterval(() => {
             setCurrDate(dateObj(new Date()));
             setTimeLeft(calculateTimeLeft());
-            data = getData();
         }, 60000);
     
-      return () => {
-      }
-    }, [])
-
-    const searchAll = ()=>{
-        setArr(data);
-        setSearchTitle("All Tasks");
-        setSelectedFilter("all");
-    }
+        // Cleanup function to clear the interval when the component is unmounted
+        return () => {
+            clearInterval(intervalId);
+        };
+    }, []); // The empty dependency array ensures this effect runs only once on mount
+    
 
     const searchArray = (x)=>{
-        setArr(arrayFilter(x));
-        if (x === "missed") {
+        if(x === "all"){
+            setArr(arrayFilter(x));
+            setSearchTitle("All Tasks");
+            setSelectedFilter(x);
+        }else if (x === "missed") {
+            setArr(arrayFilter(x));
             setSearchTitle("Oops ! You missed these ..");
-            setSelectedFilter("missed");
+            setSelectedFilter(x);
         }else if (x === "done") {
+            setArr(arrayFilter(x));
             setSearchTitle("All Done :)");
-            setSelectedFilter("done");
+            setSelectedFilter(x);
         }else{
+            setArr(arrayFilter(x));
             setSearchTitle("To Do's");
-            setSelectedFilter("to do");
-        } 
+            setSelectedFilter(x);
+        }
     }
     
     const displayString=(str)=>{
@@ -68,7 +78,7 @@ export default function Dashboard() {
     }
 
     //for highlighting the active filter
-    const [selectedFilter, setSelectedFilter] = useState("to do");
+    const [selectedFilter, setSelectedFilter] = useState(str);
     const buttonStyle = {
         color: 'var(--color)',
     };
@@ -77,7 +87,7 @@ export default function Dashboard() {
         color: 'var(--highlighter)', // Set the highlighted color
     };
 
-  let prevDate;
+    let prevDate;
 
   return (
     <div>
@@ -85,7 +95,7 @@ export default function Dashboard() {
             <img src={Img} alt=""/>
             <div className='flex-column justify-content-center align-items-end'>
                 <h2>{currDate.time} {currDate.monthLong} ' {currDate.date}</h2>
-                <p>{timeLeft}</p>
+                <p className={timeLeft.timeStyle}>{timeLeft.timeStr}</p>
             </div>
         </div>
 
@@ -95,8 +105,9 @@ export default function Dashboard() {
                 <button onClick={()=>searchArray("to do")} style={selectedFilter === "to do" ? highlightedButtonStyle : buttonStyle} >To Do's</button>
                 <button onClick={()=>searchArray("missed")} style={selectedFilter === "missed" ? highlightedButtonStyle : buttonStyle} >Missed Tasks</button>
                 <button onClick={()=>searchArray("done")} style={selectedFilter === "done" ? highlightedButtonStyle : buttonStyle} >Done Tasks</button>
-                <button onClick={searchAll} style={selectedFilter === "all" ? highlightedButtonStyle : buttonStyle} >All </button>
+                <button onClick={()=>searchArray("all")} style={selectedFilter === "all" ? highlightedButtonStyle : buttonStyle} >All </button>
             </div>
+
             <div className = 'flexInline' >
                 <span>
                     <input type="text" placeholder='Search for Task' onInput={(e) => displayString(e.target.value)}/>
@@ -138,22 +149,8 @@ export default function Dashboard() {
                         </div>
                     
                         <div className='taskCard-Details'>
-                            <TaskCard 
-                                itemKey = {task[0]}
-                                title= {task[1].Title}
-                                task = {task[1].Task}
-                                formTime = {task[1].Time}
-                                time = {formatedTime.time}
-                                date = {formatedTime.date}
-                                day = {formatedTime.day}
-                                month = {formatedTime.month}
-                                alarm = {task[1].Alarm}
-                                cat = {task[1].Category}
-                                collab ={task[1].Collaborates}
-                                status ={task[1].Status}
-                                /> 
+                            <TaskCard id = {task[0]} task= {task[1]} time = {formatedTime.time} /> 
                         </div>
-
                     </div>
                 </div>        
             );

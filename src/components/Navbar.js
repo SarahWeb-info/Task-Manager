@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import '../css/navbar.css';
 import { BsFillMoonFill, BsArrowUpShort, BsListNested } from 'react-icons/bs';
 import { handleMode } from '../handleMode';
+import DialogForm from '../components/DialogForm.js';
 
 export default function Navbar() {
   const [topDrop, setTopDrop] = useState('-100vh');
@@ -20,6 +21,15 @@ export default function Navbar() {
     handleMode();
   };
 
+  const [showDialogForm , setShowDialogForm] = useState(false);
+    const openDialogForm=()=>{
+        setShowDialogForm(true);
+    }
+    
+    const closeDialogForm=()=>{
+        setShowDialogForm(false);
+    }
+
   return (
     <>
       <div className="flexInline navbar-Container">
@@ -29,26 +39,26 @@ export default function Navbar() {
         </button>
 
         <div className="myDropmenu dropdownLeft" style={{top : `${topDrop}`,opacity : `${dropDownOpacity}`}}>
-          <button onClick={closeTopDropdown} className="noBtn">
+          <button onClick={closeTopDropdown} className="btnUp">
             <BsArrowUpShort />
           </button>
 
-          <a href="http://" target="_blank" rel="noopener noreferrer">
+          <button onClick={openDialogForm} className='noBtn'>
             New Task
-          </a>
-          <a href="http://" target="_blank" rel="noopener noreferrer">
-            Missed Tasks
-          </a>
-          <a href="http://" target="_blank" rel="noopener noreferrer">
-            Finished Tasks
-          </a>
-          <a href="http://" target="_blank" rel="noopener noreferrer">
+          </button>
+          <a href="/app?filter=to do" >
             To do Tasks
           </a>
-          <a href="http://" target="_blank" rel="noopener noreferrer">
+          <a href="/app?filter=missed" >
+            Missed Tasks
+          </a>
+          <a href="/app?filter=done" >
+            Completed Tasks
+          </a>
+          <a className='text-muted' >
             More Apps
           </a>
-          <a href="http://" target="_blank" rel="noopener noreferrer">
+          <a className='text-muted'>
             About Us
           </a>
         </div>
@@ -58,6 +68,7 @@ export default function Navbar() {
         </button>
       </div>
       <div className ="navbarGhost" ></div>
+      {showDialogForm && <DialogForm onClose={closeDialogForm} formType = 'add' />}
     </>
   )
 }

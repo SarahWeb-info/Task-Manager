@@ -3,17 +3,17 @@ import './app.css';
 import Intro from './tabs/Intro';
 import Main from './tabs/Main';
 import Task from './tabs/TaskPg';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter , Routes , Route } from "react-router-dom";
 
 export default function App() {
   
   return (
-    <Router>
+    <BrowserRouter>
       <Routes>
         <Route path="/" element={<Intro />} />
         <Route path="/app" element={<Main />} />
         <Route path="/task" element={<Task />} />
       </Routes>
-    </Router>
+    </BrowserRouter>
   );
 }

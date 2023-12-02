@@ -1,69 +1,46 @@
 To do App : Calendo
+Design : src\imgs\2023-10-20 (1).png
+Time Duration : 1.2 weeks (for my first project)
 
 Languages :
-React 
-bootstrap
+    1-React Js Dom
+    2-Bootstrap
+    3-Css 
 
+Folder Division :
 Tabs :
-    -Intro page : {About app} . 
-        (
-            i - caruosal with 3 slides 
-            ii- app tutorial
-            iii-Skip Btn
-        )
+    1- Intro.js
+    2- Main.js
+    3- Dashborad.js
+    4- TaskPg.js
 
-    -Sign In page: { Only visible if the user is not signed in , or may just 1rst time after app install }else {visible signin form}(
-            i- sign up/sign in manually
-            ii-sign up/sign in by gmail
-            iii- use of cashe and cookies question
-        )     
-Tabs templates : 
-    inlineflex 1
-        (i) - menu btn (shortcuts of all app features + account settings + my apps promotions)
-        (ii)- alarm btn (with a filter of alarms- displays max 10 results with load more feature)
-        (iii)-profile icon (with a drop down of account setting)
-    inlineflex 2
-        (iV)- back btn (if not on the main page) 
-        (v) - tab heading H1
-        (vi)- calender icon btn
-        (vii)-filter icon btn
+Compnents : 
+    1- AddTask.js
+    2- DailogForm.js
+    3-Navbar.js
+    4-TaskCards.js
+    5-TripleDotsMenu.js
 
-Dashboard :
-    - large boxes for the upcoming task - (show all the tasks of the current day / if current day tasks are less than three , than show upcoming three tasks )
-    - all tasks list (display max 10 ) , with load more ten taks btn
-    - veiw calender wit tasks and claender navigation
-    - dashboard task filters (filters by dates, catagory , alarms , collaborations)   
+imgs:
+...
 
-Account setting :
-    - account setting updates
-    - email weekly tasks updates
-    - alarm or reminder settings
+css : 
+    5 files in the css folder and 
+    2 files in root folder (index.css & app.css)
 
-Task tab :    
-    - Dynamic page 
-    - task heading and 3 dots of task alarm settings
-    - task catagory (if any)
-    - task details 
-    - task collaborators
+My Js working files :
+    1- handleMode.js 
+    (for handling night mode . Using local storage)
 
-Add tasks : (form)
-    - Task heading
-    - Task catagory
-    - Task date
-    - Task alarm
-    - Task text
-    - Task voice msg
-    - Task picture
-    - Task collabrate (radio btn with a more detail option btn and a pop up form email , name , catagory , )
+    2- GetData.js
+    (for handling data filters , data and string filters . for calculating Time left and for Handling Date display format)
 
-components :
-- btn
-- nav template
-- pop up alerts / confirm box 
--tasks
--clustur icon (small collabrate box)
--dropdowns
--icons
+    3- modifyData.js
+    (to handle the 3dots menu in the task cards and task page. Performing CRUD operation)
 
-problem : 
-- my dropdown does not close manually and is closed even when I am clicking inside the dropdown
+Data : 
+    AddData.js (sample data for the app)
+
+Additional Packages Installed : 
+    1- React Icons
+    2- React Bootstrap        
